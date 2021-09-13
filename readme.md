@@ -1,5 +1,9 @@
 # Jinnmail Dashboard
 
+## Project Created From
+
+npx create-react-app dash-pwa --template cra-template-pwa
+
 ## Component Hierarchy
 ```
 Error Boundary
