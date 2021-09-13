@@ -21,7 +21,19 @@
     "workbox-range-requests": "^5.1.3",
     "workbox-routing": "^5.1.3",
     "workbox-strategies": "^5.1.3",
-    "workbox-streams": "^5.1.3"
+    "workbox-streams": "^5.1.3",
+    "react-google-recaptcha": "^2.1.0",
+    "react-google-recaptcha-v3": "^1.5.2",
+    "react-number-format": "^4.4.1",
+    "react-redux": "^7.1.3",
+    "react-router-dom": "^5.2.0",
+    "material-table": "^1.68.0",
+    "intro.js": "^2.9.3",
+    "intro.js-react": "^0.2.0",
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
+    "@reduxjs/toolkit": "^1.1.0",
+    "@stripe/stripe-js": "1.3.2"
   },
   "scripts": {
     "start": "react-scripts start",
