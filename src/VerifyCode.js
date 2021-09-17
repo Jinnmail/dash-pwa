@@ -3,6 +3,7 @@ import {Link, withRouter} from "react-router-dom";
 import {Button, Grid} from '@material-ui/core';
 import {CheckCircleOutline as CheckCircleOutlineIcon} from '@material-ui/icons';
 import NumberFormat from 'react-number-format';
+import { postVerify } from './verify-code-helper';
 
 function VerifyCode(props) {
   const [showSuccessIcon, setShowSuccessIcon] = React.useState(false);
@@ -12,11 +13,7 @@ function VerifyCode(props) {
     const inputNumber = event.target.value.replace(/\s/g, '');
     if (Number(inputNumber)) {
       if (props.history.location.state.prevPath === '/signup') {
-        res = await fetch(`${process.env.REACT_APP_API}/user/code/verify`, {
-          method: 'POST', 
-          headers: {'Content-type': 'application/json'}, 
-          body: JSON.stringify({email: localStorage.getItem('email'), code: inputNumber})
-        })
+        res = await postVerify(localStorage.getItem('email'), inputNumber)
       } else {
         res = await fetch(`${process.env.REACT_APP_API}/user/code/resetPasswordTokenVerify`, {
           method: 'POST', 
@@ -80,10 +77,34 @@ function VerifyCode(props) {
       <Grid item xs={12}>&nbsp;</Grid>
       <Grid item xs={3} md={5}>&nbsp;</Grid>
       <Grid item xs={6} md={2} style={{textAlign: 'center'}}>
-        <NumberFormat format="# # # # # #" allowEmptyFormatting mask="_" style={{height: '50px', width: "145px", fontSize: '20pt', textAlign: 'center'}} onChange={verifyCodeChanged} fullWidth />
+        <NumberFormat
+          format="# # # # # #"
+          allowEmptyFormatting
+          mask="_"
+          style={{
+            height: '50px',
+            width: "145px",
+            fontSize: '20pt',
+            textAlign: 'center'
+          }}
+          onChange={verifyCodeChanged}
+          fullWidth
+          data-testid="verify-code-input" 
+        />
       </Grid>
       <Grid item xs={3} md={5}>
-        &nbsp; {showSuccessIcon && <CheckCircleOutlineIcon style={{color: 'green', verticalAlign: 'middle', width: 40, height: 40}} />}
+        &nbsp; {
+          showSuccessIcon && 
+          <CheckCircleOutlineIcon
+            style={{
+              color: 'green',
+              verticalAlign: 'middle',
+              width: 40,
+              height: 40
+            }}
+            data-testid="green-success-icon"
+          />
+        }
       </Grid>
       <Grid item xs={12}>&nbsp;</Grid>
       <Grid item xs={12}>&nbsp;</Grid>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {useHistory, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 import {
   Button,
@@ -14,9 +14,9 @@ import {
   Visibility as VisibilityIcon, 
   VisibilityOff as VisibilityOffIcon, 
 } from '@material-ui/icons';
+import { postCreateUser } from './create-account-helper';
 
 function Signup(props) {
-  // const [generalLoginErrorText, setGeneralLoginErrorText] = React.useState('');
   const [recaptcha, setRecaptcha] = React.useState(false);
   const [allowedToSubmit, setAllowedToSubmit] = React.useState(false);
   const [email, setEmail] = React.useState('');
@@ -27,9 +27,7 @@ function Signup(props) {
     passwordValid: false
   });
 
-  let history = useHistory();
-
-  const onEmailChanged = (event) => {
+  const onEmailChanged = (prop) => (event) => {
     var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     if (regex.test(event.target.value)) {
       setEmail(event.target.value)
@@ -37,16 +35,16 @@ function Signup(props) {
     } else {
       setEmail('')
     }
+    setValues({ ...values, [prop]: event.target.value });
   }
 
   const onPasswordChanged = (prop) => (event) => {
     if(/(?=.{12,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^\w\s])/.test(event.target.value)) {
-      if (process.env.NODE_ENV === 'development') {
+      if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
         setAllowedToSubmit(true);
       } else {
         setRecaptcha(true);
       }
-
     }  else {
       setRecaptcha(false);
       setAllowedToSubmit(false);
@@ -71,11 +69,7 @@ function Signup(props) {
       setEmailErrorText('Invalid Email')
     } else {
       if (allowedToSubmit) {
-        const res = await fetch(`${process.env.REACT_APP_API_2}/user`, {
-          method: 'POST', 
-          headers: {'Content-type': 'application/json'}, 
-          body: JSON.stringify({email: email, password: values.password})
-        })
+        const res = await postCreateUser(email, values.password);
         const json = await res.json();
         if (!json.error) {
           localStorage.setItem('email', email);
@@ -108,9 +102,13 @@ function Signup(props) {
                 type="email"
                 variant="outlined"
                 fullWidth
-                onChange={onEmailChanged}
+                value={values.email}
+                onChange={onEmailChanged('email')}
                 error={emailErrorText !== ''}
                 helperText={emailErrorText}
+                inputProps={{
+                  "data-testid": "email"
+                }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -138,6 +136,9 @@ function Signup(props) {
                     </InputAdornment>
                   )
                 }}
+                inputProps={{
+                  "data-testid": "password"
+                }}
               />
             </Grid>
           </Grid>
@@ -151,12 +152,13 @@ function Signup(props) {
       </Grid>
       <Grid item xs={11} md={2}>
         {
-          recaptcha && 
-          <ReCAPTCHA
-            size="compact"
-            sitekey="6LfoK8MZAAAAAAqzzkWscqJbD0fCizOs13IfOZu9"
-            onChange={onRecaptchaSuccess}
-          />
+          recaptcha && (
+            <ReCAPTCHA
+              size="compact"
+              sitekey="6LfoK8MZAAAAAAqzzkWscqJbD0fCizOs13IfOZu9"
+              onChange={onRecaptchaSuccess}
+            />
+          )
         }
       </Grid>
       <Hidden mdUp>
@@ -165,7 +167,16 @@ function Signup(props) {
         </Grid>
       </Hidden>
       <Grid item xs={10} md={2} style={{textAlign: "right"}}>
-        <Button id="createAccount" variant="outlined" color="primary" onClick={onCreateAccountClick} disabled={!allowedToSubmit}>Create Account</Button>
+        <Button 
+          id="createAccount" 
+          variant="outlined" 
+          color="primary" 
+          onClick={onCreateAccountClick} 
+          disabled={!allowedToSubmit}
+          data-testid="create-account"
+        >
+          Create Account
+        </Button>
       </Grid>
       <Grid item xs={1} md={4}>
         
