@@ -3,6 +3,7 @@ import {Link, withRouter} from 'react-router-dom';
 import {Button, Grid, Hidden, IconButton, InputAdornment, LinearProgress, TextField, Tooltip} from '@material-ui/core';
 import {Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon} from '@material-ui/icons';
 import ReCAPTCHA from "react-google-recaptcha";
+import { postLogin } from './login-helper';
 
 /*global chrome*/
 
@@ -51,11 +52,7 @@ const Login = (props) => {
     event.preventDefault()
     if (allowedToSubmit) {
       setSubmitting(true);
-      const res = await fetch(`${process.env.REACT_APP_API}/user/session`, {
-        method: 'post', 
-        headers: {'Content-type': 'application/json'}, 
-        body: JSON.stringify({email: email, password: passwordValues.password})
-      })
+      const res = await postLogin(email, passwordValues.password)
       const json = await res.json();
       if (!json.error) {
         localStorage.setItem("jinnmailToken", json.data.sessionToken);
@@ -106,6 +103,9 @@ const Login = (props) => {
                 onChange={onEmailChanged}
                 error={emailErrorText !== ''}
                 helperText={emailErrorText}
+                inputProps={{
+                  "data-testid": "email"
+                }}
               />
             </Grid>
             <Grid item xs={12}>&nbsp;</Grid>
@@ -132,6 +132,9 @@ const Login = (props) => {
                       </Tooltip>
                     </InputAdornment>
                   )
+                }}
+                inputProps={{
+                  "data-testid": "password"
                 }}
               />
               {submitting && <LinearProgress />}
@@ -163,7 +166,15 @@ const Login = (props) => {
           <Grid item xs={1}></Grid>
         </Hidden>
         <Grid item xs={11} md={2} style={{textAlign: "right"}}>
-          <Button variant="contained" color="primary" onClick={onLoginClick} disabled={!allowedToSubmit}>Log In</Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={onLoginClick}
+            disabled={!allowedToSubmit}
+            data-testid="login"
+          >
+            Log In
+          </Button>
         </Grid>
         <Grid item xs={1} md={4}>
           

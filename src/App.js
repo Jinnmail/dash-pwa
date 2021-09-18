@@ -15,6 +15,7 @@ import Checkout from './Checkout';
 import Canceled from './Canceled';
 import Success from './Success';
 import X from './X';
+import { getUserId, getUser } from './app-helper';
 
 const App = () => {
   function PrivateRoute({ children, ...rest }) {
@@ -43,11 +44,8 @@ const App = () => {
 
     async function fetchPaid() {
       if (localStorage.getItem('jinnmailToken')) {
-        const userId = JSON.parse(atob(localStorage.getItem("jinnmailToken").split('.')[1])).userId
-        const res = await fetch(`${process.env.REACT_APP_API}/user/${userId}`, {
-          method: 'GET', 
-          headers: {'Authorization': localStorage.getItem("jinnmailToken")},
-        })
+        const userId = getUserId();
+        const res = await getUser(userId)
         const json = await res.json();
         setPaid(json.premium);
       }

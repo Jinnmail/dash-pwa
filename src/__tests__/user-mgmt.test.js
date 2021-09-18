@@ -29,6 +29,42 @@ jest.mock('../verify-code-helper', () => ({
   })})
 }));
 
+jest.mock('../login-helper', () => ({
+  postLogin: () => Promise.resolve({ json: () => Promise.resolve({
+    data: {
+      status: "authorized",
+      userId: "bgf1-71...",
+      email: "a@a.com",
+      sessionToken: "eyKhbGciPiJIUzI2NiI...",
+      expiresIn: "24h",
+    },
+    error: '', 
+    message: 'Login Successful',
+    status: 200
+  })})
+}));
+
+jest.mock('../app-helper', () => ({
+  getUserId: () => "bgf1-71...",
+  getUser: () => Promise.resolve({ json: () => Promise.resolve({
+    verified: true,
+    resetPasswordToken: "777777",
+    aliasesCount: 7,
+    maxInvites: 5,
+    invites: 3,
+    premium: true,
+    _id: "4fe7",
+    userId: "bgf1-71...",
+    email: "a@a.com",
+    password: "$3b$Qe...",
+    verificationCode: "123456",
+    created: "2020-06-16T01:06:04.620Z",
+    __v: 0,
+    resetPasswordExpires: "2021-08-08T21:31:53.505Z"
+  })})
+}));
+
+
 test('create new user', async () => {
   const {debug, getByTestId, getByText} = renderWithRouter(<App />, { route: '/signup' });
 
@@ -46,4 +82,22 @@ test('create new user', async () => {
   userEvent.type(getByTestId('verify-code-input'), '111111')
 
   await waitFor(() => expect(expect(getByText(/log in/i)).toBeInTheDocument()))
+})
+
+test('existing user can log in', async () => {
+  const {debug, getByTestId, getByText} = renderWithRouter(<App />, { route: '/login' });
+
+  expect(getByText(/log in/i)).toBeInTheDocument()
+  expect(getByTestId('login')).toBeDisabled();
+
+  userEvent.type(getByTestId('email'), users[0].email)
+  userEvent.type(getByTestId('password'), users[0].password)
+
+  expect(getByTestId('login')).not.toBeDisabled();
+
+  await waitFor(() => {
+    userEvent.click(getByTestId('login'))
+  })
+
+  expect(getByText(/dashboard/i)).toBeInTheDocument();
 })
