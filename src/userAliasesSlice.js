@@ -1,9 +1,5 @@
-import {
-  createSlice, 
-  createAsyncThunk, 
-  createSelector
-} from '@reduxjs/toolkit';
-import {useDispatch} from 'react-redux';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { getUser } from './app-helper';
 
 export const fetchUserAliases = createAsyncThunk('userAliases/fetchUserAliases', async () => {
   const res = await fetch(`${process.env.REACT_APP_API}/alias`, 
@@ -23,9 +19,6 @@ export const fetchUserAliases = createAsyncThunk('userAliases/fetchUserAliases',
 
 export const fetchUser = createAsyncThunk('userAliases/fetchUser', async (userId) => {
   const res = await getUser(userId);
-  // const res = await fetch(`${process.env.REACT_APP_API}/user/${userId}`, 
-  //   {headers: {'Authorization': localStorage.getItem('jinnmailToken')}
-  // });
   const user = await res.json();
 
   return user
