@@ -8,6 +8,8 @@ export const loggedIn = () => {
       return false;
     }
   }
+  
+  return false;
 }
 
 export const logOut = () => {

@@ -28,7 +28,7 @@ const App = () => {
           ) : (
             <Redirect
               to={{
-                pathname: "/signup",
+                pathname: "/login",
                 state: { from: location }
               }}
             />
@@ -125,7 +125,7 @@ const App = () => {
           <Route path="/canceled">
             <Canceled />
           </Route>
-          <Redirect to='/login' />
+          <Redirect to='/dashboard' />
         </Switch>
       </Router>
     </div>
