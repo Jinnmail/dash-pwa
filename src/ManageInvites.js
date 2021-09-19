@@ -4,7 +4,7 @@ import {Button, Grid, IconButton, TextField} from '@material-ui/core';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import {fetchUser, fetchUserInvitesArr} from './userAliasesSlice';
 import {useSelector, useDispatch} from 'react-redux';
-import {LoginUtil} from './LoginUtil';
+import { loggedIn } from './LoginUtil';
 import NavBar from './NavBar';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -76,7 +76,7 @@ function ManageInvites(props) {
     <Fragment>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          {LoginUtil.loggedIn() && <NavBar />}
+          {loggedIn() && <NavBar />}
         </Grid>
         <Grid item xs={12}>
           <Button variant="outlined" color="primary" onClick={() => props.history.goBack()}>&lt; Back</Button>

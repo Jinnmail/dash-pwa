@@ -7,7 +7,7 @@ import ConfirmAliasDeletion from './ConfirmAliasDeletion';
 import {detectURL} from './functions';
 import MaterialTable from "material-table";
 import { forwardRef } from 'react';
-import {LoginUtil} from './LoginUtil';
+import { loggedIn } from './LoginUtil';
 import NavBar from './NavBar';
 import {
   fetchUserAliases,
@@ -57,6 +57,7 @@ import {
   // ToggleOn as ToggleOnIcon, 
   // ToggleOff as ToggleOffIcon
 } from '@material-ui/icons';
+import { getUserId } from './app-helper';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -121,7 +122,7 @@ function Dashboard() {
     if (userAliasesStatus === 'idle') {
       dispatch(fetchUserAliases())
     }
-    const userId = JSON.parse(atob(localStorage.getItem("jinnmailToken").split('.')[1])).userId
+    const userId = getUserId()
     dispatch(fetchUser(userId))
   }, [userAliasesStatus, dispatch]); // status as in get status not alias.status
 
@@ -283,7 +284,7 @@ function Dashboard() {
     <div>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          {LoginUtil.loggedIn() && <NavBar />}
+          {loggedIn() && <NavBar />}
         </Grid>
         {/* <Grid item xs={12}>
           <img src="logo.png" alt="logo" width="250" height="62" />
@@ -317,18 +318,3 @@ function Dashboard() {
 }
 
 export default Dashboard;
-
-// import React from 'react';
-// import {LoginUtil} from './LoginUtil';
-// import NavBar from './NavBar';
-
-// const Dashboard = () => {
-//   return (
-//     <div>
-//       {LoginUtil.loggedIn() && <NavBar />}
-//       Dashboard
-//     </div>
-//   )
-// }
-
-// export default Dashboard;

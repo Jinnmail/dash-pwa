@@ -2,7 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import {Box, Button, Grid, Hidden} from '@material-ui/core';
 import NavBar from './NavBar';
-import {LoginUtil} from './LoginUtil';
+import { loggedIn } from './LoginUtil';
 
 const fetchCheckoutSession = async ({ quantity }) => {
   return fetch(`${process.env.REACT_APP_API}/payment/create-checkout-session`, {
@@ -100,7 +100,7 @@ const Checkout = () => {
       alignItmes="center"
       spacing={2}
     >
-      <Grid item xs={12}>{LoginUtil.loggedIn() && <NavBar />}</Grid>
+      <Grid item xs={12}>{loggedIn() && <NavBar />}</Grid>
       <Grid item xs={3}></Grid>
       <Grid item xs={6} md={4} style={{textAlign: 'center'}}>
         <Grid container>

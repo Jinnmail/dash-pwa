@@ -22,9 +22,10 @@ export const fetchUserAliases = createAsyncThunk('userAliases/fetchUserAliases',
 });
 
 export const fetchUser = createAsyncThunk('userAliases/fetchUser', async (userId) => {
-  const res = await fetch(`${process.env.REACT_APP_API}/user/${userId}`, 
-    {headers: {'Authorization': localStorage.getItem('jinnmailToken')}
-  });
+  const res = await getUser(userId);
+  // const res = await fetch(`${process.env.REACT_APP_API}/user/${userId}`, 
+  //   {headers: {'Authorization': localStorage.getItem('jinnmailToken')}
+  // });
   const user = await res.json();
 
   return user

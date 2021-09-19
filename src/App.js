@@ -6,7 +6,7 @@ import Dashboard from './Dashboard';
 import ForgotPassword from './ForgotPassword';
 import Login from './Login';
 import Account from './Account';
-import { LoginUtil } from './LoginUtil';
+import { loggedIn } from './LoginUtil';
 import VerifyCode from './VerifyCode';
 import ForgotPasswordSet from './ForgotPasswordSet';
 import ManageInvites from './ManageInvites';
@@ -23,7 +23,7 @@ const App = () => {
       <Route
         {...rest}
         render={({ location }) =>
-          LoginUtil.loggedIn() ? (
+          loggedIn() ? (
             children
           ) : (
             <Redirect

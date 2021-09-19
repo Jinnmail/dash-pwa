@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {LoginUtil} from './LoginUtil';
+import { loggedIn } from './LoginUtil';
 import NavBar from './NavBar';
 import {Button, Hidden, Grid, TextField} from '@material-ui/core';
 import ReCAPTCHA from "react-google-recaptcha";
@@ -63,7 +63,7 @@ const ForgotPassword = (props) => {
         // alignItems="stretch"
       >
         <Grid item xs={12}>
-          {LoginUtil.loggedIn() && <NavBar />}
+          {loggedIn() && <NavBar />}
         </Grid>
         <Grid item xs={12}>
           &nbsp;
@@ -151,11 +151,6 @@ const ForgotPassword = (props) => {
         </Grid>
       </Grid>
     </Fragment>
-    // <div>
-    //   {LoginUtil.loggedIn() && <NavBar />}
-    //   ForgotPassword
-    //   <button onClick={sendCodeClick}>Request code</button>
-    // </div>
   )
 }
 

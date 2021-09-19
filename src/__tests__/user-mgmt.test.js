@@ -1,9 +1,11 @@
 import { act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { Provider } from 'react-redux';
 
 import App from '../App';
 import { renderWithRouter } from '../__mocks__/functions';
 import { users } from '../__mocks__/users';
+import store from '../app/store';
 
 jest.mock('../create-account-helper', () => ({
   postCreateUser: () => Promise.resolve({ json: () => Promise.resolve({
@@ -64,6 +66,9 @@ jest.mock('../app-helper', () => ({
   })})
 }));
 
+jest.mock('../LoginUtil', () => ({
+  loggedIn: () => true
+}))
 
 test('create new user', async () => {
   const {debug, getByTestId, getByText} = renderWithRouter(<App />, { route: '/signup' });
@@ -85,7 +90,10 @@ test('create new user', async () => {
 })
 
 test('existing user can log in', async () => {
-  const {debug, getByTestId, getByText} = renderWithRouter(<App />, { route: '/login' });
+  const {debug, getByTestId, getByText} = renderWithRouter(
+    <Provider store={store}>
+      <App />
+    </Provider>, { route: '/login' });
 
   expect(getByText(/log in/i)).toBeInTheDocument()
   expect(getByTestId('login')).toBeDisabled();

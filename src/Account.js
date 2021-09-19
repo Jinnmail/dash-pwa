@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {LoginUtil} from './LoginUtil';
+import { loggedIn } from './LoginUtil';
 import NavBar from './NavBar';
 import {Button, Grid, Hidden, IconButton, InputAdornment, TextField, Tooltip} from '@material-ui/core'
 import {
@@ -121,7 +121,7 @@ function Account(props) {
     <Fragment>
       <Grid container>
         <Grid item xs={12}>
-          {LoginUtil.loggedIn() && <NavBar />}
+          {loggedIn() && <NavBar />}
         </Grid>
         <Grid item xs={12}>
           &nbsp;
@@ -255,27 +255,3 @@ function Account(props) {
 }
 
 export default withRouter(Account);
-
-// import React from 'react';
-// import {Link} from 'react-router-dom';
-// import {LoginUtil} from './LoginUtil';
-// import NavBar from './NavBar';
-
-// const Account = () => {
-//   const location = {
-//     pathname: '/dashboard/change-password',
-//     state: {prevPath: '/account'}
-//   }
-
-//   return (
-//     <div>
-//       {LoginUtil.loggedIn() && <NavBar />}
-//       Account
-//       <small>
-//         <Link to={location}>Forgot Password?</Link>
-//       </small>
-//     </div>
-//   )
-// }
-
-// export default Account;

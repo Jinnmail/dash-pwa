@@ -1,15 +1,11 @@
 import React, {Fragment} from 'react';
-import {LoginUtil} from './LoginUtil';
+import { logOut } from './LoginUtil';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -57,7 +53,7 @@ const NavBar = (props) => {
   };
 
   const onLogOutClick = () => {
-    LoginUtil.logOut();
+    logOut();
     props.history.push('/login');
   }
 
@@ -106,7 +102,6 @@ const NavBar = (props) => {
                   <div className={classes.headerOptions}>
                     <Button color="inherit" onClick={() => props.history.push('/dashboard')}>Dashboard</Button>
                     <Button color="inherit" onClick={() => {props.history.push('/account')}}>My Account</Button>
-                    {/* <Button color="inherit" onClick={() => { props.history.push('/contact') }}>Contact</Button> */}
                     <Button color="inherit" onClick={onLogOutClick}>Log Out</Button>
                   </div>
               }
