@@ -1,7 +1,7 @@
-import React, {Fragment, useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {Link} from "react-router-dom";
-import {makeStyles, useTheme} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import AliasForm from './AliasForm';
 import ConfirmAliasDeletion from './ConfirmAliasDeletion';
 import {detectURL} from './functions';
@@ -18,15 +18,12 @@ import {
   selectUserAliases, 
   setNameTextReadOnly, 
   setNameButtonText, 
-  setUserAliasesStatus, 
 } from './userAliasesSlice';
 import {
-  Box, 
   Button, 
   Chip,  
   Grid, 
-  IconButton, 
-  Input,  
+  IconButton,   
   Modal, 
   Switch, 
   TextField, 
@@ -54,8 +51,6 @@ import {
   Favorite as FavoriteIcon,
   MailOutline as MailOutlineIcon,  
   Refresh as RefreshIcon, 
-  // ToggleOn as ToggleOnIcon, 
-  // ToggleOff as ToggleOffIcon
 } from '@material-ui/icons';
 import { getUserId } from './app-helper';
 
@@ -106,8 +101,13 @@ function Dashboard() {
   const userAliasesStatus = useSelector((state) => state.userAliases.status);
   const user = useSelector((state) => state.userAliases.user);
   const error = useSelector((state) => state.userAliases.error);
-  const [openCopyAliasTooltip, setOpenCopyAliasTooltip] = React.useState('Copy alias');
-  const [openCreateAliasModal, setCreateAliasModalOpen] = React.useState(false);
+  const [openCopyAliasTooltip, setOpenCopyAliasTooltip] = useState('Copy alias');
+  const [openCreateAliasModal, setCreateAliasModalOpen] = useState(false);
+  const [mode, setMode] = useState('online');
+
+  if (!navigator.onLine) {
+    alert()
+  }
 
   const classes = useStyles();
   
@@ -120,10 +120,18 @@ function Dashboard() {
 
   useEffect(() => {
     if (userAliasesStatus === 'idle') {
-      dispatch(fetchUserAliases())
+      try {
+        dispatch(fetchUserAliases())
+      } catch(err) {
+        setMode('offline');
+      }
     }
     const userId = getUserId()
-    dispatch(fetchUser(userId))
+    try {
+      dispatch(fetchUser(userId))
+    } catch(err) {
+      setMode('offline');
+    }
   }, [userAliasesStatus, dispatch]); // status as in get status not alias.status
 
   const editNameClicked = (aliasId, buttonText) => {
@@ -165,14 +173,6 @@ function Dashboard() {
   const closeAliasTooltip = () => {
     setOpenCopyAliasTooltip('Copy alias');
   };
-
-  // const toggleOnClicked = (aliasId, newStatus) => {
-  //   dispatch(setToggle({aliasId: aliasId, newStatus: newStatus}));
-  // }
-
-  // const toggleOffClicked = (aliasId, newStatus) => {
-  //   dispatch(setToggle({aliasId: aliasId, newStatus: newStatus}));
-  // }
 
   const onToggleChange = (aliasId, newStatus) => {
     dispatch(setToggle({aliasId: aliasId, newStatus: !newStatus}));
@@ -280,17 +280,20 @@ function Dashboard() {
   }
 
   return (
-    // <div style={{maxWidth: "100%", padding: "10px"}}>
     <div>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           {loggedIn() && <NavBar />}
         </Grid>
-        {/* <Grid item xs={12}>
-          <img src="logo.png" alt="logo" width="250" height="62" />
-        </Grid> */}
         <Grid item xs={12}>
           <div>
+            <div>
+              {
+                mode === 'offline' 
+                ? <div>you are in offline mode or some issue with connection</div>
+                : <div>&nbsp;</div>
+              }
+            </div>
             <MailOutlineIcon iconStyle={classes.smallIcon} style={{verticalAlign: 'middle', width: 20, height: 20}}></MailOutlineIcon> 
             <small>&nbsp; {user && user.invites} Premium Invites Remaining</small>
           </div>

@@ -93,7 +93,10 @@ const App = () => {
             <X />
           </Route>
           <Route exact path='/account/login'> {/* ext still tries to login to /account/login NOT login */}
-            <Login />
+            {loggedIn() 
+              ? <Redirect to='/dashboard' /> 
+              : <Login />
+            }
           </Route>
           <PrivateRoute2 path='/account'>
             <Account /> 

@@ -9,6 +9,7 @@ import reportWebVitals from './reportWebVitals';
 import ErrorBoundary from './ErrorBoundary';
 import {ThemeProvider} from '@material-ui/core/styles';
 import theme from './theme';
+// import swDev from './swDev';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -32,3 +33,5 @@ serviceWorkerRegistration.register();
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
+// swDev();
