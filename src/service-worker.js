@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-globals */
 
 // This service worker can be customized!
-// See https://developers.google.com/web/tools/modules
+// See https://developers.google.com/web/tools/workbox/modules
 // for the list of available Workbox modules, or add any other
 // code you'd like.
 // You can also remove this file if you'd prefer not to use a
@@ -21,7 +21,6 @@ clientsClaim();
 // even if you decide not to use precaching. See https://cra.link/PWA
 precacheAndRoute(self.__WB_MANIFEST);
 
-registerRoute('/index.html', new workbox.strategies.NetworkFirst());
 // Set up App Shell-style routing, so that all navigation requests
 // are fulfilled with your index.html shell. Learn more at
 // https://developers.google.com/web/fundamentals/architecture/app-shell
