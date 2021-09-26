@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import {Button, Grid, Hidden, IconButton, InputAdornment, LinearProgress, TextField, Tooltip} from '@material-ui/core';
 import {Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon} from '@material-ui/icons';
 import ReCAPTCHA from "react-google-recaptcha";
 import { postLogin } from './login-helper';
+import Alert from '@material-ui/lab/Alert';
 
 /*global chrome*/
 
@@ -16,6 +17,13 @@ const Login = (props) => {
   const [allowedToSubmit, setAllowedToSubmit] = React.useState(false);
   const [submitting, setSubmitting] = React.useState(false);
   const [failedLogin, setFailedLogin] = React.useState(0);
+  const [mode, setMode] = useState('online');
+
+  useEffect(() => {
+    if (!navigator.onLine) {
+      setMode('offline')
+    }
+  }, [navigator.onLine])
 
   const onEmailChanged = (event) => {
     var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
@@ -92,6 +100,10 @@ const Login = (props) => {
         <Grid item xs={10} md={4}>
           <Grid container>
             <Grid item xs={12}>
+              {(mode === 'offline') 
+                ? <Alert severity="error">you are in offline mode</Alert>
+                : <div>&nbsp;</div>
+              }
               <h2 style={{textAlign: 'center', color: 'gray'}}>Jinnmail</h2>
             </Grid>
             <Grid item xs={12}>

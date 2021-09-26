@@ -52,6 +52,7 @@ import {
   MailOutline as MailOutlineIcon,  
   Refresh as RefreshIcon, 
 } from '@material-ui/icons';
+import Alert from '@material-ui/lab/Alert';
 import { getUserId } from './app-helper';
 
 const tableIcons = {
@@ -105,9 +106,11 @@ function Dashboard() {
   const [openCreateAliasModal, setCreateAliasModalOpen] = useState(false);
   const [mode, setMode] = useState('online');
 
-  if (!navigator.onLine) {
-    alert()
-  }
+  useEffect(() => {
+    if (!navigator.onLine) {
+      setMode('offline')
+    }
+  }, [navigator.onLine])
 
   const classes = useStyles();
   
@@ -289,8 +292,8 @@ function Dashboard() {
           <div>
             <div>
               {
-                mode === 'offline' 
-                ? <div>you are in offline mode or some issue with connection</div>
+                (mode === 'offline') 
+                ? <Alert severity="warning">you are in offline mode or some issue with connection</Alert>
                 : <div>&nbsp;</div>
               }
             </div>
