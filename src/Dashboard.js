@@ -123,18 +123,10 @@ function Dashboard() {
 
   useEffect(() => {
     if (userAliasesStatus === 'idle') {
-      try {
-        dispatch(fetchUserAliases())
-      } catch(err) {
-        setMode('offline');
-      }
+      dispatch(fetchUserAliases())
     }
     const userId = getUserId()
-    try {
-      dispatch(fetchUser(userId))
-    } catch(err) {
-      setMode('offline');
-    }
+    dispatch(fetchUser(userId))
   }, [userAliasesStatus, dispatch]); // status as in get status not alias.status
 
   const editNameClicked = (aliasId, buttonText) => {

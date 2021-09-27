@@ -45,9 +45,14 @@ const App = () => {
     async function fetchPaid() {
       if (localStorage.getItem('jinnmailToken')) {
         const userId = getUserId();
-        const res = await getUser(userId)
-        const json = await res.json();
-        setPaid(json.premium);
+        try {
+          const res = await getUser(userId)
+          const json = await res.json();
+          setPaid(json.premium);
+          localStorage.setItem('paid', json.premium)
+        } catch (err) {
+          setPaid(localStorage.getItem('paid'))
+        };
       }
       setLoaded(true);
     }

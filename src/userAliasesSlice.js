@@ -2,24 +2,36 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getUser } from './app-helper';
 
 export const fetchUserAliases = createAsyncThunk('userAliases/fetchUserAliases', async () => {
-  const res = await fetch(`${process.env.REACT_APP_API}/alias`, 
-    {headers: {'Authorization': localStorage.getItem('jinnmailToken')}
-  });
-  const json = await res.json();
-  const userAliases = json.data;
-
-  userAliases.forEach(userAlias => {
-    userAlias.nameTextReadOnly = true
-    userAlias.editDisabled = false
-    userAlias.nameButtonText = 'edit'
-  }); 
-
-  return userAliases;
+  let userAliases;
+  try {
+    const res = await fetch(`${process.env.REACT_APP_API}/alias`, 
+      {headers: {'Authorization': localStorage.getItem('jinnmailToken')}
+    });
+    const json = await res.json();
+    userAliases = json.data;
+    localStorage.setItem('userAliases', JSON.stringify(userAliases));
+  } catch (err) {
+    userAliases = JSON.parse(localStorage.getItem('userAliases'));
+  } finally {
+    userAliases.forEach(userAlias => {
+      userAlias.nameTextReadOnly = true
+      userAlias.editDisabled = false
+      userAlias.nameButtonText = 'edit'
+    });
+    
+    return userAliases;
+  }
 });
 
 export const fetchUser = createAsyncThunk('userAliases/fetchUser', async (userId) => {
-  const res = await getUser(userId);
-  const user = await res.json();
+  let user;
+  try {
+    const res = await getUser(userId);
+    user = await res.json();
+    localStorage.setItem('user', JSON.stringify(user));
+  } catch(err) {
+    user = JSON.parse(localStorage.getItem('user'))
+  }
 
   return user
 })
