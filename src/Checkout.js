@@ -105,24 +105,9 @@ const Checkout = () => {
       <Grid item xs={6} md={4} style={{textAlign: 'center'}}>
         <Grid container>
           <Grid item xs={12}>
-            <Hidden lgUp>
-              <img
-                alt="Random asset from Picsum"
-                src="logo.png"
-                style={{width: '100%', height: 'auto'}}
-              />
-            </Hidden>
-            <Hidden mdDown>
-              <img
-                alt="Random asset from Picsum"
-                src="logo.png"
-                style={{width: '70%', height: 'auto'}}
-              />
-            </Hidden>
-          </Grid>
-          <Grid item xs={12}>
             <h2 style={{margin: 0}}>One-time: $9</h2>
-            An awesome 42 rad features and 7GB of Power
+            <div>&nbsp;</div>
+            An awesome 42 fat features and 7GB of power
           </Grid>
           <Grid item xs={12}>
             &nbsp;
@@ -151,3 +136,22 @@ const Checkout = () => {
 };
 
 export default Checkout;
+
+{/* <Grid item xs={12}>
+  <Hidden lgUp>
+    <img
+      data-teset-id="x"
+      alt="Random asset from Picsum"
+      src="logo.png"
+      style={{width: '100%', height: 'auto'}}
+    />
+  </Hidden>
+  <Hidden mdDown>
+    <img
+      data-test-id="y"
+      alt="Random asset from Picsum"
+      src="logo.png"
+      style={{width: '70%', height: 'auto'}}
+    />
+  </Hidden>
+</Grid> */}
