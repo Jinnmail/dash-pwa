@@ -4,7 +4,7 @@ import logo from './logo.svg';
 import CreateAccount from './CreateAccount';
 import Dashboard from './Dashboard';
 import ForgotPassword from './ForgotPassword';
-import Login from './Login';
+import TransitionToLogin from './TransitionToLogin';
 import Account from './Account';
 import { loggedIn } from './LoginUtil';
 import VerifyCode from './VerifyCode';
@@ -99,7 +99,7 @@ const App = () => {
         <Route exact path='/account/login'> {/* ext still tries to login to /account/login NOT login */}
           {loggedIn() 
             ? <Redirect to='/dashboard' /> 
-            : <Login />
+            : <TransitionToLogin />
           }
         </Route>
         <PrivateRoute2 path='/account'>
@@ -115,7 +115,7 @@ const App = () => {
           <ManageInvites /> 
         </PrivateRoute2>
         <Route path="/login">
-          <Login />
+          <TransitionToLogin />
         </Route>
         <Route path="/signup">
           <CreateAccount />
