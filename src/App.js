@@ -85,58 +85,56 @@ const App = () => {
   }
   
   return (
-    <div>
-      <Router>
-        <Switch>
-          <Route exact path={["/forgot-password", "/dashboard/change-password"]}>
-            <ForgotPassword />
-          </Route>
-          <Route exact path={["/forgot-password-set", "/dashboard/change-password-set"]}>
-            <ForgotPasswordSet />
-          </Route>
-          <Route exact path="/account/x/:token">
-            <X />
-          </Route>
-          <Route exact path='/account/login'> {/* ext still tries to login to /account/login NOT login */}
-            {loggedIn() 
-              ? <Redirect to='/dashboard' /> 
-              : <Login />
-            }
-          </Route>
-          <PrivateRoute2 path='/account'>
-            <Account /> 
-          </PrivateRoute2>
-          <Route path="/verify-code">
-            <VerifyCode />
-          </Route>
-          <PrivateRoute2 exact path="/dashboard">
-            <Dashboard />
-          </PrivateRoute2>
-          <PrivateRoute2 exact path='/invites'>
-            <ManageInvites /> 
-          </PrivateRoute2>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/signup">
-            <CreateAccount />
-          </Route>
-          <Route path="/redeem-invite">
-            <RedeemInvite />
-          </Route>
-          <PrivateRoute exact path="/checkout">
-            <Checkout />
-          </PrivateRoute>
-          <Route path="/success">
-            <Success />
-          </Route>
-          <Route path="/canceled">
-            <Canceled />
-          </Route>
-          <Redirect to='/dashboard' />
-        </Switch>
-      </Router>
-    </div>
+    <Router>
+      <Switch>
+        <Route exact path={["/forgot-password", "/dashboard/change-password"]}>
+          <ForgotPassword />
+        </Route>
+        <Route exact path={["/forgot-password-set", "/dashboard/change-password-set"]}>
+          <ForgotPasswordSet />
+        </Route>
+        <Route exact path="/account/x/:token">
+          <X />
+        </Route>
+        <Route exact path='/account/login'> {/* ext still tries to login to /account/login NOT login */}
+          {loggedIn() 
+            ? <Redirect to='/dashboard' /> 
+            : <Login />
+          }
+        </Route>
+        <PrivateRoute2 path='/account'>
+          <Account /> 
+        </PrivateRoute2>
+        <Route path="/verify-code">
+          <VerifyCode />
+        </Route>
+        <PrivateRoute2 exact path="/dashboard">
+          <Dashboard />
+        </PrivateRoute2>
+        <PrivateRoute2 exact path='/invites'>
+          <ManageInvites /> 
+        </PrivateRoute2>
+        <Route path="/login">
+          <Login />
+        </Route>
+        <Route path="/signup">
+          <CreateAccount />
+        </Route>
+        <Route path="/redeem-invite">
+          <RedeemInvite />
+        </Route>
+        <PrivateRoute exact path="/checkout">
+          <Checkout />
+        </PrivateRoute>
+        <Route path="/success">
+          <Success />
+        </Route>
+        <Route path="/canceled">
+          <Canceled />
+        </Route>
+        <Redirect to='/dashboard' />
+      </Switch>
+    </Router>
   );
 }
 

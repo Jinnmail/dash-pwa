@@ -13,10 +13,10 @@ import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { StaleWhileRevalidate } from 'workbox-strategies';
 
-var CACHE = {
-	name: 'Application Cache',
-	version: '1'
-};
+// var CACHE = {
+// 	name: 'Application Cache',
+// 	version: '1'
+// };
 
 clientsClaim();
 
@@ -79,44 +79,156 @@ registerRoute(
   })
 );
 
-// Install service worker, adding all our cache entries
+registerRoute(
+  ({url}) => {
+    const userAndAnything = new RegExp('/api/v1/user/.*')
+    if (url.pathname.match(userAndAnything)) {
+      return true;
+    }
+  
+    return false;
+  },
+  new StaleWhileRevalidate()
+);
+
+registerRoute(
+  ({url}) => {
+    return url.pathname === '/api/v1/alias';
+  },
+  new StaleWhileRevalidate()
+);
+
+registerRoute(
+  ({url}) => {
+    return url.pathname.includes('/api/v1/alias/checkAlias');
+  },
+  new StaleWhileRevalidate()
+);
+
+registerRoute(
+  ({url}) => {
+    // todo: james s
+    // /api/v1/alias/alias/id
+    // look up in dev the id
+
+    // return url.pathname.includes('/api/v1/alias/checkAlias');
+  },
+  new StaleWhileRevalidate()
+);
+
+self.addEventListener('fetch', async function (event) {
+  if (event.request.method === 'GET') return;
+  if (event.request.url.includes('/api/v1/alias')) {
+    if(!navigator.onLine) {
+			var authHeader = event.request.headers.get('Authorization');
+			var reqUrl = event.request.url;
+			Promise.resolve(event.request.text()).then((payload) => {
+        console.log(authHeader);
+        console.log(payload);
+        console.log('intercepted, no save state');
+        // todo: james s save post and data to database
+				// saveIntoIndexedDb(reqUrl, authHeader, payload)
+			})
+		}
+  }
+})
+
+// const DB_NAME = 'jinnmailDb';
+// const DB_VERSION = 1;
+// const DB_STORE_NAME = 'aliases';
+
+// var db;
+
+// // Install service worker
 // self.addEventListener('install', function (event) {
 // 	console.info('Event: Install');
-// 	/*
-// 	** check network state after certain time interval
-// 	** If online for the first time, create an indexed db and a table
-// 	** If online after going offline, hit all requests saved in indexed table to server and empty the table
-// 	*/
-// 	checkNetworkState(); // creates database
+
+//   console.info('opening the database');
+// 	var req = indexedDB.open(DB_NAME, DB_VERSION);
+
+// 	req.onsuccess = function (evt) {
+// 		db = this.result; // Equal to: db = req.result;
+// 	};
+
+// 	req.onerror = function (evt) {
+// 		console.error("opening database error:", evt.target.errorCode);
+// 	};
+
+// 	req.onupgradeneeded = function (evt) {
+//     console.info('creating object store');
+// 		var store = evt.currentTarget.result.createObjectStore(
+// 			DB_STORE_NAME, 
+//       { keyPath: 'id', autoIncrement: true
+//     });
+// 	};
+
+// 	checkNetworkState();
 // });
 
-// Activate service worker
-// self.addEventListener('activate', (event) => {
-// 	console.info('Event: Activate');
-// 	event.waitUntil(
-// 		self.clients.claim(),
-// 		caches.keys().then((cacheNames) => {
-// 			return Promise.all(
-// 				cacheNames.map((cache) => {
-// 					if (cache !== CACHE.name + CACHE.version) {
-// 						//delete all old caches or else new version of service worker won't get installed
-// 						return caches.delete(cache);
-// 					}
-// 				})
-// 			);
-// 		})
-// 	);
-// });
+// function checkNetworkState() {
+// 	setInterval(function () {
+// 		if (navigator.onLine) {
+// 			sendPostRequestsToServer();
+// 		}
+// 	}, 3000);
+// }
 
-// This allows the web app to trigger skipWaiting via
-// registration.waiting.postMessage({type: 'SKIP_WAITING'})
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
-});
+// function sendPostRequestsToServer() {
+//   console.log('sending post requests and then delete them');
+//   var store = getObjectStore(DB_STORE_NAME, 'readonly');
+//   var allRecords = store.getAll();
+//   if (allRecords.result && allRecords.result.length > 0) {
+//     var records = allRecords.result
+//     var resp = sendFetchRequestsToServer( // recursive call to send each alias
+//       fetch(records[0].url, {
+//         method: "post",
+//         headers: {
+//           'Accept': 'application/json',
+//           'Content-Type': 'application/json',
+//           'Authorization': records[0].authHeader
+//         },
+//         body: records[0].payload
+//       }), 
+//       records[0].url, 
+//       records[0].authHeader, 
+//       records[0].payload, 
+//       records.slice(1)
+//     )
 
-// self.addEventListener('fetch', async (event) => {
+//     for (var i = 0; i < allRecords.result.length; i++)
+//       store.delete(allRecords.result[i].id)
+//   }
+// }
+
+// async function sendFetchRequestsToServer(data, reqUrl, authHeader, payload, records) {
+// 	let promise = Promise.resolve(data).then((response) => {
+// 		console.log('Successfully sent request to server')
+// 		if (records.length != 0) {
+// 			sendFetchRequestsToServer(
+// 				fetch(records[0].url, {
+// 					method: "post",
+// 					headers: {
+// 						'Accept': 'application/json',
+// 						'Content-Type': 'application/json',
+// 						'Authorization': records[0].authHeader
+// 					},
+// 					body: records[0].payload
+// 				}), 
+//         records[0].url, 
+//         records[0].authHeader, 
+//         records[0].payload, 
+//         records.slice(1)
+//       )
+// 		}
+// 		return true
+// 	}).catch((e) => {
+// 		//fetch fails only in case of network error. Fetch is successful in case of any response code
+// 		console.log('Exception while sending post request to server' + e)
+// 		saveIntoIndexedDb(reqUrl, authHeader, payload)
+// 	})
+// }
+
+// self.addEventListener('fetch', async function (event) {
 // 	if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin')
 // 		return;
 // 	if (event.request.method === 'GET') {
@@ -135,161 +247,271 @@ self.addEventListener('message', (event) => {
 // 	}
 // 	else {
 // 		if(!navigator.onLine){
-// 			//here you can check for specific urls to be saved in indexed db
 // 			var authHeader = event.request.headers.get('Authorization');
 // 			var reqUrl = event.request.url;
 // 			Promise.resolve(event.request.text()).then((payload) => {
-// 				//save offline requests to indexed db
 // 				saveIntoIndexedDb(reqUrl, authHeader, payload)
 // 			})
 // 		}
 // 	}
+// });
+
+// function saveIntoIndexedDb(url, authHeader, payload) {
+// 	var myRequest = {};
+// 	jsonPayLoad = JSON.parse(payload)
+// 	myRequest.url = url;
+// 	myRequest.authHeader = authHeader;
+// 	myRequest.payload = JSON.stringify(jsonPayLoad);
+// 	var request = indexedDB.open("TrayTrackingPostDB");
+// 	request.onsuccess = function (event) {
+// 		var db = event.target.result;
+// 		var tx = db.transaction('postrequest', 'readwrite');
+// 		var store = tx.objectStore('postrequest');
+// 		store.add(myRequest)
+// 	}
+// }
+
+// function getObjectStore(store_name, mode) {
+// 	var tx = db.transaction(store_name, mode);
+// 	return tx.objectStore(store_name);
+// }
+
+// function addAlias() {
+//   var store = getObjectStore(DB_STORE_NAME, 'readwrite');
+//   try {
+//     req = store.add(obj);
+//   } catch (e) {
+//     if (e.name == 'DataCloneError')
+//       displayActionFailure("This engine doesn't know how to clone a Blob, " +
+//                            "use Firefox");
+//     throw e;
+//   }
+
+//   req.onsuccess = function (evt) {
+//     console.log("Insertion in DB successful");
+//   };
+
+//   req.onerror = function() {
+//     console.error("add alias error", this.error);
+//   };
+// }
+
+
+
+// // This allows the web app to trigger skipWaiting via
+// // registration.waiting.postMessage({type: 'SKIP_WAITING'})
+// self.addEventListener('message', (event) => {
+//   if (event.data && event.data.type === 'SKIP_WAITING') {
+//     self.skipWaiting();
+//   }
+// });
+
+// function checkNetworkState() {
+// 	setInterval(function () {
+// 		if (navigator.onLine) {
+// 			sendOfflinePostRequestsToServer() // create database
+// 		}
+// 	}, 3000);
+// }
+
+// self.addEventListener('fetch', async (event) => {
+// 	if (navigator.online) {
+// 		console.log('online todo save me')
+// 	} else {
+// 		//here you can check for specific urls to be saved in indexed db
+// 		if (event.request.method === 'GET') {
+// 			var authHeader = event.request.headers.get('Authorization');
+// 			var reqUrl = event.request.url
+// 			Promise.resolve(event.request.text()).then((payload) => {
+// 				// save offline requests to indexed db
+// 		    // saveIntoIndexedDb(reqUrl, authHeader, payload)
+// 				var myRequest = {};
+// 				// jsonPayLoad = JSON.parse(payload)
+// 				//add payload if required. If not skip parsing json and stringifying it again
+// 				//jsonPayLoad['eventTime'] = getCurrentTimeString(eventTime)
+// 				myRequest.authHeader = authHeader;
+// 				myRequest.url = reqUrl;
+// 				// myRequest.payload = JSON.stringify(jsonPayLoad);
+// 				var request = indexedDB.open("JinnmailDB2");
+// 				request.onsuccess = function (event) {
+// 					var db = event.target.result;
+// 					var tx = db.transaction('getrequest');
+// 					console.log('tx', tx)
+// 					// var store = tx.objectStore('getrequest');
+// 					// store.add(myRequest)
+// 					// console.log('myRequest', myRequest)
+// 				}
+// 				request.onupgradeneeded = function (event) {
+// 					console.log('xxxx')
+// 				}
+// 			})
+// 		}
+// 	}
+// 	// if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin')
+// 	// 	return;
+// 	// if (event.request.method === 'GET') {
+// 	// 	if (event.request.url.includes('/static/') || event.request.mode !== 'cors') {
+// 	// 		event.respondWith(fetchResponseFromCache(event.request))
+// 	// 		return
+// 	// 	}
+// 	// 	if (navigator.onLine) {
+// 	// 		event.respondWith(cacheRequest(event.request));
+// 	// 	} else {
+// 	// 		var resp = await fetchResponseFromCache(event.request).catch((e) => { return })
+// 	// 		if (resp){
+// 	// 			event.respondWith(resp)
+// 	// 		}
+// 	// 	}
+// 	// }
+// 	// else {
+// 		// if (!navigator.onLine){
+// 		// 	//here you can check for specific urls to be saved in indexed db
+// 		// 	var authHeader = event.request.headers.get('Authorization');
+// 		// 	var reqUrl = event.request.url
+// 		// 	Promise.resolve(event.request.text()).then((payload) => {
+// 		// 		//save offline requests to indexed db
+// 		// 		saveIntoIndexedDb(reqUrl, authHeader, payload)
+// 		// 	})
+// 		// }
+// 	// }
 // })
+// function saveIntoIndexedDb(url, authHeader, payload) {
+// 	var myRequest = {};
+// 	jsonPayLoad = JSON.parse(payload)
+// 	//add payload if required. If not skip parsing json and stringifying it again
+// 	//jsonPayLoad['eventTime'] = getCurrentTimeString(eventTime)
+// 	myRequest.url = url;
+// 	myRequest.authHeader = authHeader;
+// 	myRequest.payload = JSON.stringify(jsonPayLoad);
+// 	var request = indexedDB.open("JinnmailDB");
+// 	request.onsuccess = function (event) {
+// 		var db = event.target.result;
+// 		var tx = db.transaction('postrequest', 'readwrite');
+// 		var store = tx.objectStore('postrequest');
+// 		store.add(myRequest)
+// 	}
+// }
 
-function checkNetworkState() {
-	setInterval(function () {
-		if (navigator.onLine) {
-			sendOfflinePostRequestsToServer() // create database
-		}
-	}, 3000);
-}
+// async function sendOfflinePostRequestsToServer() {
+// 	var request = indexedDB.open("JinnmailDB");
+// 	request.onsuccess = function (event) {
+// 		var db = event.target.result;
+// 		// var tx = db.transaction('postrequest', 'readwrite');
+// 		// var store = tx.objectStore('postrequest');
+// 		// var allRecords = store.getAll();
+// 		// allRecords.onsuccess = function () {
+// 		// 	console.log('allRecoreds', allRecords.result);
+// 		// 	if (allRecords.result && allRecords.result.length > 0) {
+// 		// 		var records = allRecords.result
+// 		// 		//make recursive call to hit fetch requests to server in a serial manner
+// 		// 		var resp = sendFetchRequestsToServer(
+// 		// 			fetch(records[0].url, {
+// 		// 				method: "post",
+// 		// 				headers: {
+// 		// 					'Accept': 'application/json',
+// 		// 					'Content-Type': 'application/json',
+// 		// 					'Authorization': records[0].authHeader
+// 		// 				},
+// 		// 				body: records[0].payload
+// 		// 			}), records[0].url, records[0].authHeader, records[0].payload, records.slice(1))
 
-async function cacheResponse(cache, request, response, data) {
-	var responseToCache;
-	try {
-		if (!request.url.includes('/static/') && request.mode === 'cors') {
+// 		// 		for (var i = 0; i < allRecords.result.length; i++)
+// 		// 			store.delete(allRecords.result[i].id)
+// 		// 	}
+// 		// };
+// 	}
+// 	request.onupgradeneeded = function (event) {
+// 		var db = event.target.result;
+// 		db.onerror = function (event) {
+// 			console.log("Why didn't you allow my web app to use IndexedDB?!");
+// 		};
+// 		var objectStore;
+// 		if (!db.objectStoreNames.contains('postrequest')) {
+// 			objectStore = db.createObjectStore("postrequest", { keyPath: 'id', autoIncrement: true });
+// 		}
+// 		else {
+// 			objectStore = db.objectStoreNames.get('postrequest');
+// 		}
+// 	}
+// }
 
-			var responseData = await getResponseData(data)
+// async function cacheResponse(cache, request, response, data) {
+// 	var responseToCache;
+// 	try {
+// 		if (!request.url.includes('/static/') && request.mode === 'cors') {
 
-			responseToCache = new Response(btoa(responseData), {
-				headers: response.clone().headers
-			})
-		} else {
-			responseToCache = response.clone()
-		}
-		cache.put(request, responseToCache);
-	} catch (err) {
-	}
-	return response;
-}
+// 			var responseData = await getResponseData(data)
 
-const cacheRequest = request => caches.open(CACHE.name + CACHE.version).then(cache =>
-	fetch(request.clone(), {
-		credentials: 'same-origin'
-	})
-		.then(response =>
-			cacheResponse(cache, request.clone(), response, response.clone().text()))
-);
+// 			responseToCache = new Response(btoa(responseData), {
+// 				headers: response.clone().headers
+// 			})
+// 		} else {
+// 			responseToCache = response.clone()
+// 		}
+// 		cache.put(request, responseToCache);
+// 	} catch (err) {
+// 	}
+// 	return response;
+// }
 
-const fetchResponseFromCache = (request, returnResponseData) =>
-	caches.open(CACHE.name + CACHE.version).then(cache =>
-		cache.match(request, { ignoreVary: true }).then(response => returnResponseFromCache(request, response, returnResponseData, cache))
-	);
+// const cacheRequest = request => caches.open(CACHE.name + CACHE.version).then(cache =>
+// 	fetch(request.clone(), {
+// 		credentials: 'same-origin'
+// 	})
+// 		.then(response =>
+// 			cacheResponse(cache, request.clone(), response, response.clone().text()))
+// );
 
-async function returnResponseFromCache(request, response, returnResponseData, cache) {
-	if (response && !request.url.includes('/static/') && request.mode === 'cors') {
-		var responseData = await getResponseData(response.text())
-		if (returnResponseData)
-			return responseData
-		response = new Response(atob(responseData), {
-			headers: response.headers
-		})
-	}
+// const fetchResponseFromCache = (request, returnResponseData) =>
+// 	caches.open(CACHE.name + CACHE.version).then(cache =>
+// 		cache.match(request, { ignoreVary: true }).then(response => returnResponseFromCache(request, response, returnResponseData, cache))
+// 	);
 
-	if (!!response) {
-		return response;
-	} else {
-		console.log(request.url + ' not yet cached!')
-		return fetch(request, { credentials: 'same-origin' }).then(response => cacheResponse(cache, request, response))
-	}
-}
+// async function returnResponseFromCache(request, response, returnResponseData, cache) {
+// 	if (response && !request.url.includes('/static/') && request.mode === 'cors') {
+// 		var responseData = await getResponseData(response.text())
+// 		if (returnResponseData)
+// 			return responseData
+// 		response = new Response(atob(responseData), {
+// 			headers: response.headers
+// 		})
+// 	}
 
-async function getResponseData(data) {
-	let promise = Promise.resolve(data).then((text) => {
-		return text
-	})
-	let result = await promise;
-	return result
-}
+// 	if (!!response) {
+// 		return response;
+// 	} else {
+// 		console.log(request.url + ' not yet cached!')
+// 		return fetch(request, { credentials: 'same-origin' }).then(response => cacheResponse(cache, request, response))
+// 	}
+// }
 
-async function sendOfflinePostRequestsToServer() {
-	var request = indexedDB.open("TrayTrackingPostDB");
-	request.onsuccess = function (event) {
-		var db = event.target.result;
-		var tx = db.transaction('postrequest', 'readwrite');
-		var store = tx.objectStore('postrequest');
-		var allRecords = store.getAll();
-		allRecords.onsuccess = function () {
-			if (allRecords.result && allRecords.result.length > 0) {
-				var records = allRecords.result
-				//make recursive call to hit fetch requests to server in a serial manner
-				var resp = sendFetchRequestsToServer(
-					fetch(records[0].url, {
-						method: "post",
-						headers: {
-							'Accept': 'application/json',
-							'Content-Type': 'application/json',
-							'Authorization': records[0].authHeader
-						},
-						body: records[0].payload
-					}), records[0].url, records[0].authHeader, records[0].payload, records.slice(1))
+// async function getResponseData(data) {
+// 	let promise = Promise.resolve(data).then((text) => {
+// 		return text
+// 	})
+// 	let result = await promise;
+// 	return result
+// }
 
-				for (var i = 0; i < allRecords.result.length; i++)
-					store.delete(allRecords.result[i].id)
-			}
-		};
-	}
-	request.onupgradeneeded = function (event) {
-		var db = event.target.result;
-		db.onerror = function (event) {
-			console.log("Why didn't you allow my web app to use IndexedDB?!");
-		};
-		var objectStore;
-		if (!db.objectStoreNames.contains('postrequest')) {
-			objectStore = db.createObjectStore("postrequest", { keyPath: 'id', autoIncrement: true });
-		}
-		else {
-			objectStore = db.objectStoreNames.get('postrequest');
-		}
-	}
-}
-
-function saveIntoIndexedDb(url, authHeader, payload) {
-	var myRequest = {};
-	jsonPayLoad = JSON.parse(payload)
-	//add payload if required. If not skip parsing json and stringifying it again
-	//jsonPayLoad['eventTime'] = getCurrentTimeString(eventTime)
-	myRequest.url = url;
-	myRequest.authHeader = authHeader;
-	myRequest.payload = JSON.stringify(jsonPayLoad);
-	var request = indexedDB.open("TrayTrackingPostDB");
-	request.onsuccess = function (event) {
-		var db = event.target.result;
-		var tx = db.transaction('postrequest', 'readwrite');
-		var store = tx.objectStore('postrequest');
-		store.add(myRequest)
-	}
-}
-
-async function sendFetchRequestsToServer(data, reqUrl, authHeader, payload, records) {
-	let promise = Promise.resolve(data).then((response) => {
-		console.log('Successfully sent request to server')
-		if (records.length != 0) {
-			sendFetchRequestsToServer(
-				fetch(records[0].url, {
-					method: "post",
-					headers: {
-						'Accept': 'application/json',
-						'Content-Type': 'application/json',
-						'Authorization': records[0].authHeader
-					},
-					body: records[0].payload
-				}), records[0].url, records[0].authHeader, records[0].payload, records.slice(1))
-		}
-		return true
-	}).catch((e) => {
-		//fetch fails only in case of network error. Fetch is successful in case of any response code
-		console.log('Exception while sending post request to server' + e)
-		saveIntoIndexedDb(reqUrl, authHeader, payload)
-	})
-}
+// async function sendFetchRequestsToServer(data, reqUrl, authHeader, payload, records) {
+// 	let promise = Promise.resolve(data).then((response) => {
+// 		console.log('Successfully sent request to server')
+// 		if (records.length != 0) {
+// 			sendFetchRequestsToServer(
+// 				fetch(records[0].url, {
+// 					method: "post",
+// 					headers: {
+// 						'Accept': 'application/json',
+// 						'Content-Type': 'application/json',
+// 						'Authorization': records[0].authHeader
+// 					},
+// 					body: records[0].payload
+// 				}), records[0].url, records[0].authHeader, records[0].payload, records.slice(1))
+// 		}
+// 		return true
+// 	}).catch((e) => {
+// 		//fetch fails only in case of network error. Fetch is successful in case of any response code
+// 		console.log('Exception while sending post request to server' + e)
+// 		saveIntoIndexedDb(reqUrl, authHeader, payload)
+// 	})
+// }
