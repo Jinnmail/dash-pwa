@@ -93,13 +93,7 @@ const Checkout = () => {
   };
 
   return (
-    <Grid 
-      container
-      direction="row"
-      justify="center"
-      alignItmes="center"
-      spacing={2}
-    >
+    <Grid style={{display: 'flex', alignItems: 'center', alignContent: 'center', height: '100%'}}>
       <Grid item xs={12}>{loggedIn() && <NavBar />}</Grid>
       <Grid item xs={3}></Grid>
       <Grid item xs={6} md={4} style={{textAlign: 'center'}}>
