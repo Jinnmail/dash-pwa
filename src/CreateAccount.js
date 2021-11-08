@@ -207,7 +207,7 @@ function Signup(props) {
           
         </Grid>
         <Grid item xs={10} md={4}>
-          <p style={{textAlign: 'center'}}>-- Already have an account? ---</p>
+          <p style={{textAlign: 'center'}}>-- Already have account? ---</p>
         </Grid>
         <Grid item xs={1} md={4}>
       

@@ -126,9 +126,6 @@ function Account(props) {
         <Grid item xs={12}>
           &nbsp;
         </Grid>
-        <Grid item xs={12}>
-          <Button variant="outlined" color="primary" onClick={() => props.history.goBack()}>&lt; Back</Button>
-        </Grid>
         <Grid item xs={12} style={{textAlign: 'center'}}>
           <h2 style={{color: 'gray'}}>Preferences</h2>
         </Grid>

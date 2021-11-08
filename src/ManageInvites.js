@@ -79,9 +79,6 @@ function ManageInvites(props) {
           {loggedIn() && <NavBar />}
         </Grid>
         <Grid item xs={12}>
-          <Button variant="outlined" color="primary" onClick={() => props.history.goBack()}>&lt; Back</Button>
-        </Grid>
-        <Grid item xs={12}>
           &nbsp;
         </Grid>
         <Grid item xs={12}>
