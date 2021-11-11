@@ -50,16 +50,7 @@ function VerifyCode(props) {
 
   return (
     <Grid container style={{display: 'flex', alignItems: 'center', alignContent: 'center', height: '100%'}}>
-      <Grid item xs={12}>&nbsp;</Grid>
-      <Grid item xs={12}>&nbsp;</Grid>
-      <Grid item xs={12}>&nbsp;</Grid>
-      <Grid item xs={12}>&nbsp;</Grid>
-      <Grid item xs={12}>&nbsp;</Grid>
-      <Grid item xs={12}>&nbsp;</Grid>
-      <Grid item xs={4}>
-
-      </Grid>
-      <Grid item xs={4} style={{textAlign: 'center'}}>
+      <Grid item xs={12} style={{textAlign: 'center'}}>
         <svg width="200" height="58" viewBox="0 0 287 84" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect width="287" height="84" fill="white"/>
           <mask id="path-1-inside-1_34:3046" fill="white">
@@ -76,22 +67,21 @@ function VerifyCode(props) {
           <path d="M245.297 16.0497C243.774 14.8219 243.681 12.6124 245.087 11.0782C247.145 8.83352 250.492 10.3166 250.492 13.4733C250.492 15.1915 248.842 17.0208 247.292 17.0208C246.857 17.0208 245.96 16.5837 245.297 16.0497Z" stroke="#93907D" stroke-width="2" mask="url(#path-2-inside-2_34:3046)"/>
           <path d="M42.2695 15.9719L42.2695 15.9718C40.796 14.7843 40.6985 12.6422 42.0698 11.1458C43.07 10.0548 44.3754 9.87443 45.4298 10.3417C46.4857 10.8095 47.301 11.9323 47.301 13.4733C47.301 14.3021 46.9019 15.166 46.3081 15.8244C45.7135 16.4837 44.9386 16.9208 44.2017 16.9208C44.0084 16.9208 43.6927 16.8206 43.3332 16.6456C42.978 16.4727 42.5944 16.2339 42.2695 15.9719Z" fill="#F8F0AF" stroke="black" stroke-width="0.2"/>
         </svg>
-        <Hidden mdDown>
-          <Grid item xs={12}>&nbsp;</Grid>
-          <Grid item xs={12}>&nbsp;</Grid>
-        </Hidden>
+      </Grid>
+      <Grid item xs={12} style={{textAlign: 'center'}}>
         <h3>Verify email code</h3>
       </Grid>
-      <Grid item xs={4}></Grid>
-      {
-        (props.history.location.state.prevPath === '/forgot-password') &&
-          <Fragment>
-            <Grid item xs={12} style={{textAlign: 'center'}}>
-              If this account exists...
-            </Grid>
-            <Grid item xs={12}>&nbsp;</Grid>
-          </Fragment> 
-      }
+      <Grid item xs={12} style={{textAlign: 'center'}}>
+        {
+          (props.history.location.state.prevPath === '/forgot-password') &&
+            <Fragment>
+              <Grid item xs={12} style={{textAlign: 'center'}}>
+                If this account exists...
+              </Grid>
+              <Grid item xs={12}>&nbsp;</Grid>
+            </Fragment> 
+        }
+      </Grid>
       <Grid item xs={12} style={{textAlign: 'center'}}>
         You should have recieved a code emailed to <br />
         [{localStorage.getItem('email')}]. Enter it below.

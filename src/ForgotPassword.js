@@ -60,11 +60,6 @@ const ForgotPassword = (props) => {
         <Grid item xs={12}>
           {loggedIn() && <NavBar />}
         </Grid>
-        <Grid item xs={12}>&nbsp;</Grid>
-        <Grid item xs={12}>&nbsp;</Grid>
-        <Grid item xs={12}>&nbsp;</Grid>
-        <Grid item xs={12}>&nbsp;</Grid>
-        <Grid item xs={12}>&nbsp;</Grid>
         <Grid item xs={12} style={{textAlign: 'center'}}>
           <svg width="200" height="58" viewBox="0 0 287 84" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="287" height="84" fill="white"/>

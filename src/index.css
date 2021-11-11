@@ -2,7 +2,9 @@ html {
   font-family: "Roboto", sans-serif;
 }
 
-html, body, #root { height: 90%; }
+html { height: 97%; }
+body { height: 100%; }
+#root {height: 100%; }
 
 body {
   margin: 0;

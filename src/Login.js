@@ -18,7 +18,6 @@ const Login = (props) => {
   const [submitting, setSubmitting] = React.useState(false);
   const [failedLogin, setFailedLogin] = React.useState(0);
   const [mode, setMode] = useState('online');
-  const [transition, setTransition] = useState(true);
 
   useEffect(() => {
     if (!navigator.onLine) {
@@ -93,7 +92,16 @@ const Login = (props) => {
   }
 
   return (
-    <form style={{display: 'flex', alignItems: 'center', alignContent: 'center', height: '100%'}}>
+    <form>
+      <Grid item xs={12}>&nbsp;</Grid>
+      <Grid item xs={12}>&nbsp;</Grid>
+      <Hidden mdDown>
+        <Grid item xs={12}>&nbsp;</Grid>
+        <Grid item xs={12}>&nbsp;</Grid>
+        <Grid item xs={12}>&nbsp;</Grid>
+        <Grid item xs={12}>&nbsp;</Grid>
+        <Grid item xs={12}>&nbsp;</Grid>
+      </Hidden>
       <Grid container style={{textAlign: 'center'}}>
         <Grid item xs={1} md={4}>
 
@@ -103,14 +111,8 @@ const Login = (props) => {
             <Grid item xs={12}>
               {(mode == 'offline') 
                 ? <Alert severity="error">you are in offline mode</Alert>
-                : <div>&nbsp;</div>
+                : null
               }
-              <Grid item xs={12}>&nbsp;</Grid>
-              <Hidden mdDown>
-                <Grid item xs={12}>&nbsp;</Grid>
-                <Grid item xs={12}>&nbsp;</Grid>
-                <Grid item xs={12}>&nbsp;</Grid>
-              </Hidden>
               <svg width="200" height="58" viewBox="0 0 287 84" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="287" height="84" fill="white"/>
                 <mask id="path-1-inside-1_34:3046" fill="white">
@@ -130,7 +132,6 @@ const Login = (props) => {
             </Grid>
             <Grid item xs={12}>&nbsp;</Grid>
             <Hidden mdDown>
-              <Grid item xs={12}>&nbsp;</Grid>
               <Grid item xs={12}>&nbsp;</Grid>
             </Hidden>
             <Grid item xs={12}>

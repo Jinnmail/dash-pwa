@@ -86,7 +86,8 @@ function Signup(props) {
   }
 
   return (
-    <form style={{display: 'flex', alignItems: 'center', alignContent: 'center', height: '100%'}}>
+    <form>
+      <Grid item xs={12}>&nbsp;</Grid>
       <Grid container style={{textAlign: 'center'}}>
         <Grid item xs={1} md={4}>
 
@@ -96,6 +97,7 @@ function Signup(props) {
             <Grid item xs={12}>
               <Grid item xs={12}>&nbsp;</Grid>
               <Hidden mdDown>
+                <Grid item xs={12}>&nbsp;</Grid>
                 <Grid item xs={12}>&nbsp;</Grid>
                 <Grid item xs={12}>&nbsp;</Grid>
                 <Grid item xs={12}>&nbsp;</Grid>
@@ -118,7 +120,6 @@ function Signup(props) {
                 <path d="M42.2695 15.9719L42.2695 15.9718C40.796 14.7843 40.6985 12.6422 42.0698 11.1458C43.07 10.0548 44.3754 9.87443 45.4298 10.3417C46.4857 10.8095 47.301 11.9323 47.301 13.4733C47.301 14.3021 46.9019 15.166 46.3081 15.8244C45.7135 16.4837 44.9386 16.9208 44.2017 16.9208C44.0084 16.9208 43.6927 16.8206 43.3332 16.6456C42.978 16.4727 42.5944 16.2339 42.2695 15.9719Z" fill="#F8F0AF" stroke="black" stroke-width="0.2"/>
                 </svg>
             </Grid>
-            <Grid item xs={12}>&nbsp;</Grid>
             <Hidden mdDown>
               <Grid item xs={12}>&nbsp;</Grid>
               <Grid item xs={12}>&nbsp;</Grid>
