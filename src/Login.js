@@ -95,7 +95,7 @@ const Login = (props) => {
     <form>
       <Grid item xs={12}>&nbsp;</Grid>
       <Grid item xs={12}>&nbsp;</Grid>
-      <Hidden mdDown>
+      <Hidden xsDown>
         <Grid item xs={12}>&nbsp;</Grid>
         <Grid item xs={12}>&nbsp;</Grid>
         <Grid item xs={12}>&nbsp;</Grid>
