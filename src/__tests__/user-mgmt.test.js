@@ -86,6 +86,8 @@ test('create new user', async () => {
 
   userEvent.type(getByTestId('verify-code-input'), '111111')
 
+  await sleep(3100);
+
   await waitFor(() => expect(expect(getByText(/log in/i)).toBeInTheDocument()))
 })
 
@@ -94,6 +96,8 @@ test('existing user can log in', async () => {
     <Provider store={store}>
       <App />
     </Provider>, { route: '/login' });
+
+  await sleep(3100);
 
   expect(getByText(/log in/i)).toBeInTheDocument()
   expect(getByTestId('login')).toBeDisabled();
@@ -109,3 +113,7 @@ test('existing user can log in', async () => {
 
   expect(getByText(/dashboard/i)).toBeInTheDocument();
 })
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
