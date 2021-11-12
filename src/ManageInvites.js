@@ -1,6 +1,6 @@
 import React, {Fragment, useEffect} from 'react';
 import {withRouter} from 'react-router-dom';
-import {Button, Grid, IconButton, TextField} from '@material-ui/core';
+import {Button, Grid, IconButton, InputAdornment, TextField} from '@material-ui/core';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import {fetchUser, fetchUserInvitesArr} from './userAliasesSlice';
 import {useSelector, useDispatch} from 'react-redux';
@@ -87,7 +87,8 @@ function ManageInvites(props) {
         <Grid item xs={12}>
           <Grid container>
             <Grid item xs={10} md={4}>
-              <TextField 
+              <TextField
+                label="Email"
                 variant="outlined"
                 id="email"
                 label="Email" 
@@ -96,6 +97,9 @@ function ManageInvites(props) {
                 error={emailErrorText !== ''}
                 helperText={emailErrorText}
                 onChange={e => onEmailChange(e.target.value)} 
+                InputProps={{
+                  startAdornment: <InputAdornment position="start"></InputAdornment>,
+                }}
               />
             </Grid>
             <Grid item xs={2} md={8}>
