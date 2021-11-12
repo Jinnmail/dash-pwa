@@ -143,6 +143,9 @@ const Login = (props) => {
                 onChange={onEmailChanged}
                 error={emailErrorText !== ''}
                 helperText={emailErrorText}
+                InputProps={{
+                  startAdornment: <InputAdornment position="start"></InputAdornment>,
+                }}
                 inputProps={{
                   "data-testid": "email"
                 }}
@@ -150,7 +153,8 @@ const Login = (props) => {
             </Grid>
             <Grid item xs={12}>&nbsp;</Grid>
             <Grid item xs={12}>
-              <TextField 
+              <TextField
+                label="Password"
                 variant='outlined'
                 label='Password'
                 type={passwordValues.showPassword ? 'text' : 'password'}
@@ -158,6 +162,7 @@ const Login = (props) => {
                 onChange={onPasswordChanged('password')}
                 fullWidth
                 InputProps={{
+                  startAdornment: <InputAdornment position="start"></InputAdornment>,
                   endAdornment: (
                     <InputAdornment position="end">
                       <Tooltip title="Show/Hide typing">
