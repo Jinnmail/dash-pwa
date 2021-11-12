@@ -40,7 +40,7 @@ const TransitionToLogin = () => {
         <Grid item xs={12} style={{textAlign: 'center'}}>
           <Grid item xs={12}>&nbsp;</Grid>
           <Grid item xs={12}>&nbsp;</Grid>
-          <svg width="287" height="132" viewBox="0 0 287 132" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width={width} height={height} viewBox="0 0 287 132" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clip-path="url(#clip0_41_3013)">
             <rect width="287" height="132" fill="white"/>
             <mask id="path-1-inside-1_41_3013" fill="white">
