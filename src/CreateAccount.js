@@ -134,6 +134,9 @@ function Signup(props) {
                 onChange={onEmailChanged('email')}
                 error={emailErrorText !== ''}
                 helperText={emailErrorText}
+                InputProps={{
+                  startAdornment: <InputAdornment position="start"></InputAdornment>,
+                }}
                 inputProps={{
                   "data-testid": "email"
                 }}
@@ -141,15 +144,32 @@ function Signup(props) {
             </Grid>
               <Grid item xs={12}>&nbsp;</Grid>
               <Grid item xs={12}>
-                <TextField 
+                <TextField
+                  label="Password"
                   variant='outlined'
-                  label='Password'
                   type={values.showPassword ? 'text' : 'password'}
                   value={values.password}
                   onChange={onPasswordChanged('password')}
                   fullWidth
                   helperText=" chars. At least 1 number, 1 capital letter, and 1 symbol"
                   InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <Tooltip title="Show/Hide typing">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            edge="end"
+                          >
+                            {values.showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                          </IconButton>
+                        </Tooltip>
+                      </InputAdornment>
+                    )
+                  }}
+                  InputProps={{
+                    startAdornment: <InputAdornment position="start"></InputAdornment>,
                     endAdornment: (
                       <InputAdornment position="end">
                         <Tooltip title="Show/Hide typing">
