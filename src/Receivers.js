@@ -1,6 +1,6 @@
 import { withRouter } from 'react-router-dom';
 import { forwardRef } from 'react';
-import { Grid } from '@material-ui/core';
+import { Button, Grid, InputAdornment, TextField } from '@material-ui/core';
 import MaterialTable from "material-table";
 import {
   AddBox,
@@ -65,8 +65,32 @@ function Receivers() {
       <Grid item xs={12}>
         <b style={{ color: 'gray' }}>All messages will appear to be from your master alias.</b>
       </Grid>
-      <Grid item xs={12}>
-        xxxxxx@jinnmail.com
+      <Grid item xs={4}>
+        <TextField
+          label="Email address"
+          variant="outlined"
+          fullWidth
+          disabled
+          // onChange={onEmailChanged}
+          // error={emailErrorText !== ''}
+          // helperText={emailErrorText}
+          value="xxxxxx@jinnmail.com"
+          InputProps={{
+            startAdornment: <InputAdornment position="start"></InputAdornment>,
+          }}
+        />
+      </Grid>
+      <Grid item xs={4}>&nbsp;</Grid>
+      <Grid item xs={4}>&nbsp;</Grid>
+      <Grid item xs={4}>
+        <Button 
+          variant="contained" 
+          color="primary"
+          fullWidth
+          disabled
+        >
+          Create
+        </Button>
       </Grid>
       <Grid item xs={12}>
         <MaterialTable
