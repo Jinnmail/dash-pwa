@@ -59,7 +59,7 @@ function Receivers() {
         {loggedIn() && <NavBar />}
       </Grid>
       <Grid item xs={12}>
-        <h3 style={{ color: 'gray' }}>Receiver aliases is a new feature being slowly rolled out.</h3>
+        <h3 style={{ color: 'gray' }}>Receiver aliases is a new feature slowly being rolled out.</h3>
         <h3 style={{ color: 'gray' }}>Jinnmail users will be able to email someone with their master alias directly.</h3>
       </Grid>
       <Grid item xs={12}>
