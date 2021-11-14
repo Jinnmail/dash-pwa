@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import { logOut } from './LoginUtil';
+import { withRouter } from 'react-router-dom';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -10,7 +10,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import {Button} from '@material-ui/core';
-import { withRouter } from 'react-router-dom';
+
+import { logOut } from './LoginUtil';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,6 +41,10 @@ const NavBar = (props) => {
   const theme = useTheme();
   const mobile = useMediaQuery(theme.breakpoints.down('xs'));
 
+  const currPage = (path) => {
+    return props.history.location.pathname === path;
+  }
+
   const handleChange = (event) => {
     setAuth(event.target.checked);
   };
@@ -55,7 +60,7 @@ const NavBar = (props) => {
   const onLogOutClick = () => {
     logOut();
     props.history.push('/login');
-  }
+  } 
 
   return (
     <div className={classes.root}>
@@ -93,15 +98,17 @@ const NavBar = (props) => {
                       open={open}
                       onClose={handleClose}
                     >
-                      <MenuItem onClick={() => {props.history.push('/dashboard')}}>Dashboard</MenuItem>
-                      <MenuItem onClick={() => {props.history.push('/account')}}>My account</MenuItem>
+                      <MenuItem style={{ color: currPage('/dashboard') ? '#d2576b' : 'black'}} isCurrentPage={true} onClick={() => {props.history.push('/dashboard')}}>Dashboard</MenuItem>
+                      <MenuItem style={{ color: currPage('/account') ? '#d2576b' : 'black'}} onClick={() => {props.history.push('/account')}}>My account</MenuItem>
+                      <MenuItem style={{ color: currPage('/receivers') ? '#d2576b' : 'black' }} onClick={() => {props.history.push('/receivers')}}>Receivers</MenuItem>
                       <MenuItem onClick={onLogOutClick}>Log Out</MenuItem>
                     </Menu>
                   </Fragment>
                 :
                   <div className={classes.headerOptions}>
-                    <Button color="inherit" onClick={() => props.history.push('/dashboard')}>Dashboard</Button>
-                    <Button color="inherit" onClick={() => {props.history.push('/account')}}>My Account</Button>
+                    <Button style={{color: currPage('/dashboard') ? "#dec800" : "inherit"}} onClick={() => props.history.push('/dashboard')}>Dashboard</Button>
+                    <Button style={{color: currPage('/account') ? "#dec800" : "inherit"}} onClick={() => {props.history.push('/account')}}>My Account</Button>
+                    <Button style={{color: currPage('/receivers') ? "#dec800" : "inherit"}} onClick={() => {props.history.push('/receivers') }}>Receivers</Button>
                     <Button color="inherit" onClick={onLogOutClick}>Log Out</Button>
                   </div>
               }

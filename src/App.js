@@ -16,6 +16,7 @@ import Canceled from './Canceled';
 import Success from './Success';
 import X from './X';
 import { getUserId, getUser } from './app-helper';
+import Receivers from './Receivers';
 
 const App = () => {
   function PrivateRoute({ children, ...rest }) {
@@ -132,6 +133,9 @@ const App = () => {
         <Route path="/canceled">
           <Canceled />
         </Route>
+        <PrivateRoute2 path="/receivers">
+          <Receivers />
+        </PrivateRoute2>
         <Redirect to='/dashboard' />
       </Switch>
     </Router>
