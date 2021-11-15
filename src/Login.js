@@ -215,7 +215,7 @@ const Login = (props) => {
             disabled={!allowedToSubmit}
             data-testid="login"
           >
-            Log In
+            login
           </Button>
         </Grid>
         <Grid item xs={1} md={4}>

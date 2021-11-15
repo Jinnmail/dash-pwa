@@ -88,10 +88,10 @@ test('create new user', async () => {
 
   await sleep(3100);
 
-  await waitFor(() => expect(expect(getByText(/log in/i)).toBeInTheDocument()))
+  await waitFor(() => expect(expect(getByText(/login/i)).toBeInTheDocument()))
 })
 
-test('existing user can log in', async () => {
+test('existing user can login', async () => {
   const {debug, getByTestId, getByText} = renderWithRouter(
     <Provider store={store}>
       <App />
@@ -99,7 +99,7 @@ test('existing user can log in', async () => {
 
   await sleep(3100);
 
-  expect(getByText(/log in/i)).toBeInTheDocument()
+  expect(getByText(/login/i)).toBeInTheDocument()
   expect(getByTestId('login')).toBeDisabled();
 
   userEvent.type(getByTestId('email'), users[0].email)

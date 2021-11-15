@@ -237,7 +237,7 @@ function Signup(props) {
           
         </Grid>
         <Grid item xs={10} md={4}>
-          <Button variant="contained" color="primary" onClick={() => {props.history.push('/login')}}>Log In</Button>
+          <Button variant="contained" color="primary" onClick={() => {props.history.push('/login')}}>login</Button>
         </Grid>
         <Grid item xs={1} md={4}>
       

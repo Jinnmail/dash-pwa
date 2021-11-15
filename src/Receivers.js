@@ -1,5 +1,5 @@
+import { forwardRef, useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
-import { forwardRef } from 'react';
 import { Button, Grid, InputAdornment, TextField } from '@material-ui/core';
 import MaterialTable from "material-table";
 import {
@@ -50,6 +50,22 @@ const tableIcons = {
 };
 
 function Receivers() {
+  const [disabledMaster, setDisabledMaster] = useState(true);
+const userId = 1;
+  useEffect(() => {
+    async function fetchMasterAlias() {
+      const res = await fetch(`${process.env.REACT_APP_API}/alias/master/${userId}`,
+        {
+          headers: { 'Authorization': localStorage.getItem('jinnmailToken') }
+        });
+      const json = await res.json();
+      if (!json.data) {
+        setDisabledMaster(true); // todo: james s, set to false when ready to accept master aliases
+      }
+    }
+    fetchMasterAlias();
+  }, [])
+
   const data = [];
   data.push({receiver: 'john@doe.com', alias: 'johndoe@receiver.jinnmail.com'});
   data.push({receiver: 'jane@doe.com', alias: 'janedoe@receiver.jinnmail.com'});
@@ -67,13 +83,13 @@ function Receivers() {
       </Grid>
       <Grid item xs={4}>
         <TextField
-          label="Email address"
+          label="Master alias"
           variant="outlined"
           fullWidth
-          disabled
+          disabled={disabledMaster}
           // onChange={onEmailChanged}
-          // error={emailErrorText !== ''}
-          // helperText={emailErrorText}
+          error={false}
+          helperText="example: johndoe@jinnmail.com"
           value="xxxxxx@jinnmail.com"
           InputProps={{
             startAdornment: <InputAdornment position="start"></InputAdornment>,
@@ -87,7 +103,7 @@ function Receivers() {
           variant="contained" 
           color="primary"
           fullWidth
-          disabled
+          disabled={disabledMaster}
         >
           Create
         </Button>
