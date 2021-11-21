@@ -25,9 +25,11 @@ import {
   MailOutline as MailOutlineIcon,
   Refresh as RefreshIcon,
 } from '@material-ui/icons';
+import { observable, IObservableArray, action } from 'mobx';
 
 import NavBar from './NavBar';
 import { loggedIn } from './LoginUtil';
+import { ReceiversStore } from './receivers-store';
 import { emailAddressAllowed, randomString } from './functions';
 
 const tableIcons = {
@@ -56,6 +58,7 @@ function Receivers() {
   const [masterAliasError, setMasterAliasError] = React.useState('');
   const [masterAliasErrorText, setMasterAliasErrorText] = React.useState('');
   const [generalErrorText, setGeneralErrorText] = React.useState('');
+  const [receivers] = useState(() => new ReceiversStore())
 
   const userId = JSON.parse(atob(localStorage.getItem("jinnmailToken").split('.')[1])).userId
 
@@ -85,7 +88,7 @@ function Receivers() {
   }
 
   const data = [];
-  data.push({receiver: 'john@doe.com', alias: 'johndoe@receiver.jinnmail.com'});
+  data.push({receiver: receivers.realEmailAddresses[0], alias: 'johndoe@receiver.jinnmail.com'});
   data.push({receiver: 'jane@doe.com', alias: 'janedoe@receiver.jinnmail.com'});
 
   const onMasterAliasChanged = (textboxVal) => {
@@ -217,7 +220,7 @@ function Receivers() {
               field: "receiver",
             },
             {
-              title: "Receiver Alias",
+              title: "Receiver Alias (Send  here)",
               field: 'alias',
             }
           ]}
