@@ -1,6 +1,6 @@
 import React, { forwardRef, useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Button, Grid, IconButton, InputAdornment, TextField } from '@material-ui/core';
+import { Button, Grid, Hidden, IconButton, InputAdornment, TextField } from '@material-ui/core';
 import MaterialTable from "material-table";
 import {
   AddBox,
@@ -166,7 +166,7 @@ function Receivers() {
       <Grid item xs={12}>
         <b style={{ color: 'gray' }}>All messages will appear to be from your master alias.</b>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={8} md={4}>
         <TextField
           label="Hit ⟳ to generate"
           variant="outlined"
@@ -189,9 +189,8 @@ function Receivers() {
           }}
         />
       </Grid>
-      <Grid item xs={4}>&nbsp;</Grid>
-      <Grid item xs={4}>&nbsp;</Grid>
-      <Grid item xs={4}>
+      <Grid item xs={4} md={8}>&nbsp;</Grid>
+      <Grid item xs={8} md={4}>
         <Button 
           variant="contained" 
           color="primary"
@@ -202,8 +201,7 @@ function Receivers() {
           Create
         </Button>
       </Grid>
-      <Grid item xs={4}>&nbsp;</Grid>
-      <Grid item xs={4}>&nbsp;</Grid>
+      <Grid item xl={4} md={8}>&nbsp;</Grid>
       <Grid item xs={4}>
         <div style={{ color: 'red', textAlign: "left" }}>
           {generalErrorText}
