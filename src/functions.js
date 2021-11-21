@@ -1,3 +1,36 @@
+export function emailAddressAllowed(email) {
+  var emailRegex = /^[-+0-9A-Z_a-z](\.?[-+0-9A-Z_a-z])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
+
+  if (!email)
+    return false;
+
+  if (email.length > 254)
+    return false;
+
+  var valid = emailRegex.test(email);
+  if (!valid)
+    return false;
+
+  var parts = email.split("@");
+  if (parts[0].length > 64)
+    return false;
+
+  var domainParts = parts[1].split(".");
+  if (domainParts.some(function (part) { return part.length > 63; }))
+    return false;
+
+  return true;
+}
+
+export const randomString = (string_length) => {
+  let chars = "0123456789abcdefghiklmnopqrstuvwxyz";
+  let randomstring = '';
+  for (let i = 0; i < string_length; i++) {
+    let rnum = Math.floor(Math.random() * chars.length);
+    randomstring += chars.substring(rnum, rnum + 1);
+  }
+  return randomstring;
+}
 
 function urlRegEx(str) {
   const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/
