@@ -70,7 +70,7 @@ function Receivers() {
         setMasterAlias(json.data.alias);
         setDisabledMaster(true);
       } else {
-        setDisabledMaster(false);
+        setDisabledMaster(true); // set to false when ready so not disabled
       }
     }
     fetchMasterAlias();
