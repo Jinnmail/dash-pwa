@@ -88,8 +88,8 @@ function Receivers() {
   }
 
   const data = [];
-  data.push({receiver: receivers.realEmailAddresses[0], alias: 'johndoe@receiver.jinnmail.com'});
-  data.push({receiver: 'jane@doe.com', alias: 'janedoe@receiver.jinnmail.com'});
+  data.push({alias: 'johndoe@receiver.jinnmail.com', receiver: receivers.realEmailAddresses[0]});
+  data.push({alias: 'janedoe@receiver.jinnmail.com', receiver: receivers.realEmailAddresses[1]});
 
   const onMasterAliasChanged = (textboxVal) => {
     setMasterAliasError(false);
@@ -216,13 +216,13 @@ function Receivers() {
           icons={tableIcons}
           columns={[
             {
+              title: "Receiver Alias (Send  here)",
+              field: 'alias',
+            },
+            {
               title: "Receiver Real",
               field: "receiver",
             },
-            {
-              title: "Receiver Alias (Send  here)",
-              field: 'alias',
-            }
           ]}
           data={data}
         />
