@@ -32,6 +32,7 @@ import NavBar from './NavBar';
 import { loggedIn } from './LoginUtil';
 import { ReceiversStore } from './receivers-store';
 import { emailAddressAllowed, randomString } from './functions';
+import ReceiverForm from './ReceiverForm';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -258,7 +259,7 @@ function Receivers() {
           onClose={closeModalOnClose}
           className={classes.modal}
         >
-          <div></div>
+          <ReceiverForm />
         </Modal>
       </Grid>
     </Grid>
