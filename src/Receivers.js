@@ -1,6 +1,6 @@
 import React, { forwardRef, useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Button, Grid, Hidden, IconButton, InputAdornment, TextField } from '@material-ui/core';
+import { Button, Grid, Hidden, IconButton, InputAdornment, Modal, TextField } from '@material-ui/core';
 import MaterialTable from "material-table";
 import {
   AddBox,
@@ -26,6 +26,7 @@ import {
   Refresh as RefreshIcon,
 } from '@material-ui/icons';
 import { observable, IObservableArray, action } from 'mobx';
+import { makeStyles } from '@material-ui/core/styles';
 
 import NavBar from './NavBar';
 import { loggedIn } from './LoginUtil';
@@ -52,15 +53,26 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
+const useStyles = makeStyles((theme) => ({
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+}));
+
 function Receivers() {
   const [disabledMaster, setDisabledMaster] = useState(true);
   const [masterAlias, setMasterAlias] = React.useState('');
   const [masterAliasError, setMasterAliasError] = React.useState('');
   const [masterAliasErrorText, setMasterAliasErrorText] = React.useState('');
   const [generalErrorText, setGeneralErrorText] = React.useState('');
-  const [receivers] = useState(() => new ReceiversStore())
+  const [receivers] = useState(() => new ReceiversStore());
+  const [openModal, setOpenModal] = React.useState(false);
 
   const userId = JSON.parse(atob(localStorage.getItem("jinnmailToken").split('.')[1])).userId
+
+  const classes = useStyles();
 
   useEffect(() => {
     async function fetchMasterAlias() {
@@ -78,6 +90,14 @@ function Receivers() {
     }
     fetchMasterAlias();
   }, [])
+
+  const openModalOnClick = () => {
+    setOpenModal(true);
+  }
+
+  const closeModalOnClose = () => {
+    setOpenModal(false);
+  };
 
   const generateAlias = () => {
     const randStr = randomString(6);
@@ -210,7 +230,16 @@ function Receivers() {
       <Grid item xs={8}>&nbsp;</Grid>
       <Grid item xs={12}>
         <MaterialTable
-          title=''
+          title={
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={openModalOnClick}
+              fullWidth
+            >
+              + Receiver
+        </Button>
+          }
           icons={tableIcons}
           columns={[
             {
@@ -224,6 +253,13 @@ function Receivers() {
           ]}
           data={data}
         />
+        <Modal
+          open={openModal}
+          onClose={closeModalOnClose}
+          className={classes.modal}
+        >
+          <div></div>
+        </Modal>
       </Grid>
     </Grid>
   )
