@@ -99,16 +99,16 @@ const NavBar = (props) => {
                       onClose={handleClose}
                     >
                       <MenuItem style={{ color: currPage('/dashboard') ? '#d2576b' : 'black'}} isCurrentPage={true} onClick={() => {props.history.push('/dashboard')}}>Dashboard</MenuItem>
-                      <MenuItem style={{ color: currPage('/account') ? '#d2576b' : 'black'}} onClick={() => {props.history.push('/account')}}>My account</MenuItem>
                       <MenuItem style={{ color: currPage('/receivers') ? '#d2576b' : 'black' }} onClick={() => {props.history.push('/receivers')}}>Receivers</MenuItem>
+                    <MenuItem style={{ color: currPage('/account') ? '#d2576b' : 'black' }} onClick={() => { props.history.push('/account') }}>My account</MenuItem>
                       <MenuItem onClick={onLogOutClick}>Log Out</MenuItem>
                     </Menu>
                   </Fragment>
                 :
                   <div className={classes.headerOptions}>
                     <Button style={{color: currPage('/dashboard') ? "#dec800" : "inherit"}} onClick={() => props.history.push('/dashboard')}>Dashboard</Button>
-                    <Button style={{color: currPage('/account') ? "#dec800" : "inherit"}} onClick={() => {props.history.push('/account')}}>My Account</Button>
                     <Button style={{color: currPage('/receivers') ? "#dec800" : "inherit"}} onClick={() => {props.history.push('/receivers') }}>Receivers</Button>
+                  <Button style={{ color: currPage('/account') ? "#dec800" : "inherit" }} onClick={() => { props.history.push('/account') }}>My Account</Button>
                     <Button color="inherit" onClick={onLogOutClick}>Log Out</Button>
                   </div>
               }

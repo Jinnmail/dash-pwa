@@ -35,17 +35,57 @@ const useStyles = makeStyles((theme) => ({
 
 function ReceiverForm() {
   const [receiverAlias, setReceiverAlias] = React.useState('');
+  const [receiverAliasError, setReceiverAliasError] = React.useState('');
+  const [receiverAliasErrorText, setReceiverAliasErrorText] = React.useState('');
+  const [receiverReal, setReceiverReal] = React.useState('');
+  const [receiverRealError, setReceiverRealError] = React.useState('');
+  const [receiverRealErrorText, setReceiverRealErrorText] = React.useState('');
   const [generalErrorText, setGeneralErrorText] = React.useState('');
 
   const classes = useStyles();
 
   const receiverAliasChanged = (event) => {
     const textboxVal = event.target.value;
+    setReceiverAliasError(false);
+    setReceiverAliasErrorText('');
     var email = `${textboxVal}${process.env.REACT_APP_EMAIL_DOMAIN}`;
     if (emailAddressAllowed(email) || textboxVal === '') {
       setReceiverAlias(textboxVal);
     }
     setGeneralErrorText('');
+  }
+
+  const receiverRealChanged = (event) => {
+    const textboxVal = event.target.value;
+    setReceiverRealError(false);
+    setReceiverRealErrorText('');
+    setReceiverReal(textboxVal);
+    setGeneralErrorText('');
+  }
+
+  const submitForm = () => {
+    if (receiverAlias) {
+      // if (customDomainAlias) {
+      //   checkAlias(
+      //     `${customDomainAlias}.${customAlias}${process.env.REACT_APP_EMAIL_DOMAIN}`,
+      //     `${customAlias}${process.env.REACT_APP_EMAIL_DOMAIN}`,
+      //     `${customDomainAlias}${process.env.REACT_APP_EMAIL_DOMAIN}`)
+      // } else {
+      //   checkAlias(`${customAlias}${process.env.REACT_APP_EMAIL_DOMAIN}`, customAlias, customDomainAlias)
+      // }
+    } else {
+      setReceiverAliasError(true);
+      setReceiverAliasErrorText('Required');
+    }
+    if (receiverReal) {
+      if (!emailAddressAllowed(receiverReal)) {
+        setReceiverRealError(true);
+        setReceiverRealErrorText('Invalide email address');
+      }
+    } else {
+      setReceiverRealError(true);
+      setReceiverRealErrorText('Required');
+    }
   }
 
   return (
@@ -67,6 +107,8 @@ function ReceiverForm() {
           <TextField
             label="Enter receiver's alias"
             fullWidth
+            error={receiverAliasError}
+            helperText={receiverAliasErrorText}
             onChange={receiverAliasChanged}
             inputProps={{ maxLength: 30 }}
           />
@@ -75,7 +117,9 @@ function ReceiverForm() {
           <TextField
             label="Enter receiver's real email address"
             fullWidth
-            // onChange={e => customDomainAliasChanged(e.target.value)}
+            error={receiverRealError}
+            helperText={receiverRealErrorText}
+            onChange={receiverRealChanged}
             inputProps={{ maxLength: 50 }}
           />
         </Grid>
@@ -88,7 +132,7 @@ function ReceiverForm() {
         </Grid>
         <Grid item xs={12}>
           <div style={{ color: 'red', textAlign: "center" }}>
-            {/* {generalErrorText} */}
+            {generalErrorText}
           </div>
         </Grid>
         <Grid item md={3}>
@@ -98,7 +142,7 @@ function ReceiverForm() {
           <Button
             variant="contained"
             color="primary"
-            // onClick={submitForm}
+            onClick={submitForm}
             fullWidth
           >
             Create receiver
