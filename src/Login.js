@@ -92,16 +92,7 @@ const Login = (props) => {
   }
 
   return (
-    <form>
-      <Grid item xs={12}>&nbsp;</Grid>
-      <Grid item xs={12}>&nbsp;</Grid>
-      <Hidden xsDown>
-        <Grid item xs={12}>&nbsp;</Grid>
-        <Grid item xs={12}>&nbsp;</Grid>
-        <Grid item xs={12}>&nbsp;</Grid>
-        <Grid item xs={12}>&nbsp;</Grid>
-        <Grid item xs={12}>&nbsp;</Grid>
-      </Hidden>
+    <form style={{ display: 'flex', alignItems: 'center', alignContent: 'center', height: '100%' }}>
       <Grid container style={{textAlign: 'center'}}>
         <Grid item xs={1} md={4}>
 
