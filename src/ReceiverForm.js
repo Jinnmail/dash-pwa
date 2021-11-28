@@ -63,8 +63,55 @@ function ReceiverForm() {
     setGeneralErrorText('');
   }
 
+  const aliasFoundSameUserId = () => {
+    setGeneralErrorText('You already have this alias!');
+  }
+
+  const aliasFound = () => {
+    setGeneralErrorText('Alias already in use or is not accepted.');
+  }
+
+  const checkAlias = async (alias, link) => {
+    const userId = JSON.parse(atob(localStorage.getItem("jinnmailToken").split('.')[1])).userId
+    const res = await fetch(`${process.env.REACT_APP_API}/alias/checkAlias`, {
+      method: 'GET',
+      headers: { 'Authorization': localStorage.getItem("jinnmailToken") },
+    });
+    const json = await res.json();
+    const matchedAlias = json.data.filter(a => a.alias === alias)
+    if (matchedAlias.length > 0) {
+      if (matchedAlias[0].userId === userId) {
+        aliasFoundSameUserId();
+      } else {
+        aliasFound()
+      }
+    } else { // create new alias 
+      link = link.substring(0, link.lastIndexOf('@'))
+      alias = `http://${link}.com`
+      const res2 = await fetch(`${process.env.REACT_APP_API}/alias/receiver`, {
+        method: 'POST',
+        headers: {
+          'Authorization': localStorage.getItem("jinnmailToken"),
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify({ url: alias, source: 'cust', domainAlias: alias, realEmail: receiverReal})
+      })
+      const res2json = await res2.json();
+      if (!res2json.error) {
+      //   dispatch(aliasCreated(res2json.data.aliasId));
+      //   props.handleCreateAliasModalClose();
+      } else {
+        setGeneralErrorText(res2json.error.message)
+      }
+    }
+  }
+
   const submitForm = () => {
     if (receiverAlias) {
+      checkAlias(
+        `${receiverAlias}${process.env.REACT_APP_RECEIVER_DOMAIN}`,
+        `${receiverAlias}${process.env.REACT_APP_RECEIVER_DOMAIN}`,
+      );
       // if (customDomainAlias) {
       //   checkAlias(
       //     `${customDomainAlias}.${customAlias}${process.env.REACT_APP_EMAIL_DOMAIN}`,
@@ -126,7 +173,7 @@ function ReceiverForm() {
         <Grid item xs={12} style={{ textAlign: 'center' }}>
           <Grid container>
             <Grid item xs={12} style={{ width: '250px', wordWrap: 'break-word' }}>
-              {`${receiverAlias}${process.env.REACT_APP_EMAIL_DOMAIN}`}
+              {`${receiverAlias}${process.env.REACT_APP_RECEIVER_DOMAIN}`}
             </Grid>
           </Grid>
         </Grid>

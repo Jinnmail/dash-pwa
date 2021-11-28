@@ -228,19 +228,24 @@ function Receivers() {
           {generalErrorText}
         </div>
       </Grid>
-      <Grid item xs={8}>&nbsp;</Grid>
+      <Grid item xs={8}></Grid>
+      <Grid item xs={8} md={4}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={openModalOnClick}
+          fullWidth
+        >
+          + Receiver
+        </Button>
+      </Grid>
+      <Grid item xs={2} md={4}>&nbsp;</Grid>
+      <Grid item xs={2} md={4}>
+
+      </Grid>
       <Grid item xs={12}>
         <MaterialTable
-          title={
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={openModalOnClick}
-              fullWidth
-            >
-              + Receiver
-        </Button>
-          }
+          title='Receivers'
           icons={tableIcons}
           columns={[
             {
