@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core';
 
 import { emailAddressAllowed } from './functions';
+import { NavigateBeforeSharp } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   dashboard: {
@@ -112,14 +113,6 @@ function ReceiverForm() {
         `${receiverAlias}${process.env.REACT_APP_RECEIVER_DOMAIN}`,
         `${receiverAlias}${process.env.REACT_APP_RECEIVER_DOMAIN}`,
       );
-      // if (customDomainAlias) {
-      //   checkAlias(
-      //     `${customDomainAlias}.${customAlias}${process.env.REACT_APP_EMAIL_DOMAIN}`,
-      //     `${customAlias}${process.env.REACT_APP_EMAIL_DOMAIN}`,
-      //     `${customDomainAlias}${process.env.REACT_APP_EMAIL_DOMAIN}`)
-      // } else {
-      //   checkAlias(`${customAlias}${process.env.REACT_APP_EMAIL_DOMAIN}`, customAlias, customDomainAlias)
-      // }
     } else {
       setReceiverAliasError(true);
       setReceiverAliasErrorText('Required');
@@ -179,7 +172,7 @@ function ReceiverForm() {
         </Grid>
         <Grid item xs={12}>
           <div style={{ color: 'red', textAlign: "center" }}>
-            {generalErrorText}
+            {generalErrorText ? generalErrorText : '\u00A0'}
           </div>
         </Grid>
         <Grid item md={3}>
