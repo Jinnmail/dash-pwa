@@ -87,7 +87,7 @@ function Receivers() {
         setMasterAlias(json.data.alias);
         setDisabledMaster(true);
       } else {
-        setDisabledMaster(true); // set to false when ready so not disabled
+        setDisabledMaster(true); // todo: james s set to false when ready so not disabled
       }
     }
     fetchMasterAlias();
@@ -212,6 +212,11 @@ function Receivers() {
         />
       </Grid>
       <Grid item xs={4} md={8}>&nbsp;</Grid>
+      <Grid item xs={12}>
+        <div style={{ color: 'red', textAlign: "left" }}>
+          {generalErrorText}
+        </div>
+      </Grid>
       <Grid item xs={8} md={4}>
         <Button 
           variant="contained" 
@@ -223,21 +228,10 @@ function Receivers() {
           Create
         </Button>
       </Grid>
-      <Grid item xl={4} md={8}>&nbsp;</Grid>
-      <Grid item xs={4}>
-        <div style={{ color: 'red', textAlign: "left" }}>
-          {generalErrorText}
-        </div>
-      </Grid>
-      <Grid item xs={8}></Grid>
-      <Grid item xs={8} md={4}>
+      <Grid item xs={12}>
         <IconButton>
           <AddIcon onClick={openModalOnClick} />
         </IconButton>
-      </Grid>
-      <Grid item xs={2} md={4}>&nbsp;</Grid>
-      <Grid item xs={2} md={4}>
-
       </Grid>
       <Grid item xs={12}>
         <MaterialTable
