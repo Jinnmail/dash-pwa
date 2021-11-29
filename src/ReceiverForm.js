@@ -10,7 +10,6 @@ import {
 } from '@material-ui/core';
 
 import { emailAddressAllowed } from './functions';
-import { NavigateBeforeSharp } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   dashboard: {

@@ -27,6 +27,7 @@ import {
 } from '@material-ui/icons';
 import { observable, IObservableArray, action } from 'mobx';
 import { makeStyles } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
 
 import NavBar from './NavBar';
 import { loggedIn } from './LoginUtil';
@@ -230,14 +231,9 @@ function Receivers() {
       </Grid>
       <Grid item xs={8}></Grid>
       <Grid item xs={8} md={4}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={openModalOnClick}
-          fullWidth
-        >
-          + Receiver
-        </Button>
+        <IconButton>
+          <AddIcon onClick={openModalOnClick} />
+        </IconButton>
       </Grid>
       <Grid item xs={2} md={4}>&nbsp;</Grid>
       <Grid item xs={2} md={4}>
@@ -245,7 +241,7 @@ function Receivers() {
       </Grid>
       <Grid item xs={12}>
         <MaterialTable
-          title='Receivers'
+          title=""
           icons={tableIcons}
           columns={[
             {
