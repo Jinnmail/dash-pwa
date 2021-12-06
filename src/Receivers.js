@@ -26,6 +26,7 @@ import {
   Refresh as RefreshIcon,
 } from '@material-ui/icons';
 import { observable, IObservableArray, action } from 'mobx';
+import { useObserver } from 'mobx-react';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 
@@ -64,12 +65,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Receivers() {
-  const [disabledMaster, setDisabledMaster] = useState(true);
-  const [masterAlias, setMasterAlias] = React.useState('');
   const [masterAliasError, setMasterAliasError] = React.useState('');
   const [masterAliasErrorText, setMasterAliasErrorText] = React.useState('');
-  const [generalErrorText, setGeneralErrorText] = React.useState('');
-  const [receivers] = useState(() => new ReceiversStore());
+  const [receiverStore] = useState(() => new ReceiversStore());
   const [openModal, setOpenModal] = React.useState(false);
 
   const userId = JSON.parse(atob(localStorage.getItem("jinnmailToken").split('.')[1])).userId
@@ -77,20 +75,7 @@ function Receivers() {
   const classes = useStyles();
 
   useEffect(() => {
-    async function fetchMasterAlias() {
-      const res = await fetch(`${process.env.REACT_APP_API}/alias/master/${userId}`,
-        {
-          headers: { 'Authorization': localStorage.getItem('jinnmailToken') }
-        });
-      const json = await res.json();
-      if (json.data) {
-        setMasterAlias(json.data.alias);
-        setDisabledMaster(true);
-      } else {
-        setDisabledMaster(true); // todo: james s set to false when ready so not disabled
-      }
-    }
-    fetchMasterAlias();
+    receiverStore.fetchMasterAlias();
   }, [])
 
   const openModalOnClick = () => {
@@ -101,34 +86,26 @@ function Receivers() {
     setOpenModal(false);
   };
 
-  const generateAlias = () => {
-    const randStr = randomString(6);
-    setMasterAlias(randStr);
-    setGeneralErrorText('');
-    setMasterAliasError(false);
-    setMasterAliasErrorText('');
-  }
-
   const data = [];
-  data.push({alias: 'johndoe@receiver.jinnmail.com', receiver: receivers.realEmailAddresses[0]});
-  data.push({alias: 'janedoe@receiver.jinnmail.com', receiver: receivers.realEmailAddresses[1]});
+  data.push({alias: 'johndoe@receiver.jinnmail.com', receiver: receiverStore.realEmailAddresses[0]});
+  data.push({alias: 'janedoe@receiver.jinnmail.com', receiver: receiverStore.realEmailAddresses[1]});
 
   const onMasterAliasChanged = (textboxVal) => {
     setMasterAliasError(false);
     setMasterAliasErrorText('');
     var email = `${textboxVal}${process.env.REACT_APP_EMAIL_DOMAIN}`;
     if (emailAddressAllowed(email) || textboxVal === '') {
-      setMasterAlias(textboxVal);
+      receiverStore.masterAlias = textboxVal;
     }
-    setGeneralErrorText('');
+    receiverStore.generalErrorText = '';
   }
 
   const aliasFoundSameUserId = () => {
-    setGeneralErrorText('You already have this alias!');
+    receiverStore.generalErrorText = 'You already have this alias!';
   }
 
   const aliasFound = () => {
-    setGeneralErrorText('Alias already in use or is not accepted.');
+    receiverStore.generalErrorText ='Alias already in use or is not accepted.';
   }
 
   const checkAlias = async (link, alias) => {
@@ -158,25 +135,25 @@ function Receivers() {
       })
       const res2json = await res2.json();
       if (!res2json.error) {
-        setDisabledMaster(true);
+        receiverStore.disabledMaster = true;
         // dispatch(aliasCreated(res2json.data.aliasId));
         // props.handleCreateAliasModalClose();
       } else {
-        setGeneralErrorText('alias was blacklisted, try another')
+        receiverStore.generalErrorText = 'alias was blacklisted, try another';
       }
     }
   }
 
   const submitForm = () => {
-    if (masterAlias) {
-      checkAlias(`${masterAlias}${process.env.REACT_APP_EMAIL_DOMAIN}`, masterAlias);
+    if (receiverStore.masterAlias) {
+      checkAlias(`${receiverStore.masterAlias}${process.env.REACT_APP_EMAIL_DOMAIN}`, receiverStore.masterAlias);
     } else {
       setMasterAliasError(true);
       setMasterAliasErrorText('Required');
     }
   }
 
-  return (
+  return useObserver(() => (
     <Grid container spacing={2}>
       <Grid item xs={12}>
         {loggedIn() && <NavBar />}
@@ -193,17 +170,17 @@ function Receivers() {
           label="Hit ⟳ to generate"
           variant="outlined"
           fullWidth
-          disabled={disabledMaster}
+          disabled={receiverStore.disabledMaster}
           onChange={e => onMasterAliasChanged(e.target.value)}
           error={masterAliasError}
           helperText={masterAliasErrorText}
-          value={masterAlias}
+          value={receiverStore.masterAlias}
           inputProps={{ maxLength: 30 }}
           InputProps={{
             startAdornment: <InputAdornment position="start"></InputAdornment>,
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton onClick={generateAlias} disabled={disabledMaster}>
+                <IconButton onClick={receiverStore.generateAlias} disabled={receiverStore.disabledMaster}>
                   <RefreshIcon />
                 </IconButton>
               </InputAdornment>
@@ -214,7 +191,7 @@ function Receivers() {
       <Grid item xs={4} md={8}>&nbsp;</Grid>
       <Grid item xs={12}>
         <div style={{ color: 'red', textAlign: "left" }}>
-          {generalErrorText}
+          {receiverStore.generalErrorText}
         </div>
       </Grid>
       <Grid item xs={8} md={4}>
@@ -223,7 +200,7 @@ function Receivers() {
           color="primary"
           fullWidth
           onClick={submitForm}
-          disabled={disabledMaster}
+          disabled={receiverStore.disabledMaster}
         >
           Create
         </Button>
@@ -258,7 +235,7 @@ function Receivers() {
         </Modal>
       </Grid>
     </Grid>
-  )
+  ));
 }
 
 export default withRouter(Receivers);
