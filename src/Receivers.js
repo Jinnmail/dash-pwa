@@ -75,7 +75,12 @@ function Receivers() {
   const classes = useStyles();
 
   useEffect(() => {
-    receiverStore.fetchMasterAlias();
+    async function fetchData() {
+      await receiverStore.fetchMasterAlias();
+      await receiverStore.fetchProxymails();
+      await receiverStore.fetchReceiverAliases();
+    };
+    fetchData();
   }, [])
 
   const openModalOnClick = () => {
@@ -85,11 +90,6 @@ function Receivers() {
   const closeModalOnClose = () => {
     setOpenModal(false);
   };
-
-  const data = [];
-  data.push({alias: 'johndoe@receiver.jinnmail.com', receiver: receiverStore.realEmailAddresses[0]});
-  data.push({alias: 'janedoe@receiver.jinnmail.com', receiver: receiverStore.realEmailAddresses[1]});
-
   const onMasterAliasChanged = (textboxVal) => {
     setMasterAliasError(false);
     setMasterAliasErrorText('');
@@ -174,7 +174,7 @@ function Receivers() {
           onChange={e => onMasterAliasChanged(e.target.value)}
           error={masterAliasError}
           helperText={masterAliasErrorText}
-          value={receiverStore.masterAlias}
+          value={receiverStore.masterAlias?.alias ? receiverStore.masterAlias?.alias : ''}
           inputProps={{ maxLength: 30 }}
           InputProps={{
             startAdornment: <InputAdornment position="start"></InputAdornment>,
@@ -224,14 +224,14 @@ function Receivers() {
               field: "receiver",
             },
           ]}
-          data={data}
+          data={receiverStore.rows}
         />
         <Modal
           open={openModal}
           onClose={closeModalOnClose}
           className={classes.modal}
         >
-          <ReceiverForm />
+          <ReceiverForm handleCreateAliasModalClose={closeModalOnClose} />
         </Modal>
       </Grid>
     </Grid>

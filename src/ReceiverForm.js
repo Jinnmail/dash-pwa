@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function ReceiverForm() {
+function ReceiverForm(props) {
   const [receiverAlias, setReceiverAlias] = React.useState('');
   const [receiverAliasError, setReceiverAliasError] = React.useState('');
   const [receiverAliasErrorText, setReceiverAliasErrorText] = React.useState('');
@@ -98,8 +98,8 @@ function ReceiverForm() {
       })
       const res2json = await res2.json();
       if (!res2json.error) {
-      //   dispatch(aliasCreated(res2json.data.aliasId));
-      //   props.handleCreateAliasModalClose();
+        // dispatch(aliasCreated(res2json.data.aliasId));
+        props.handleCreateAliasModalClose();
       } else {
         setGeneralErrorText(res2json.error.message)
       }
