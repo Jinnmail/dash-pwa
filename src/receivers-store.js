@@ -32,7 +32,7 @@ export class ReceiversStore {
         });
       } else {
         runInAction(() => {
-          this.disabledMaster = true; // todo: james s set to false when ready so not disabled
+          this.disabledMaster = false;
         });
       }
     } catch(e) {
