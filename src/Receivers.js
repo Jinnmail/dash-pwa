@@ -174,7 +174,7 @@ function Receivers() {
           onChange={e => onMasterAliasChanged(e.target.value)}
           error={masterAliasError}
           helperText={masterAliasErrorText}
-          value={receiverStore.masterAlias?.alias ? receiverStore.masterAlias?.alias : ''}
+          value={receiverStore.masterAlias ? receiverStore.masterAlias : ''}
           inputProps={{ maxLength: 30 }}
           InputProps={{
             startAdornment: <InputAdornment position="start"></InputAdornment>,
