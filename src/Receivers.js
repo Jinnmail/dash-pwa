@@ -75,12 +75,7 @@ function Receivers() {
   const classes = useStyles();
 
   useEffect(() => {
-    async function fetchData() {
-      await receiverStore.fetchMasterAlias();
-      await receiverStore.fetchProxymails();
-      await receiverStore.fetchReceiverAliases();
-    };
-    fetchData();
+    receiverStore.fetchData();
   }, [])
 
   const openModalOnClick = () => {
@@ -174,10 +169,9 @@ function Receivers() {
           onChange={e => onMasterAliasChanged(e.target.value)}
           error={masterAliasError}
           helperText={masterAliasErrorText}
-          value={receiverStore.masterAlias ? receiverStore.masterAlias : ''}
+          value={receiverStore?.masterAlias?.alias ? receiverStore?.masterAlias.alias : ''}
           inputProps={{ maxLength: 30 }}
-          InputProps={{
-            startAdornment: <InputAdornment position="start"></InputAdornment>,
+          InputProps={{            startAdornment: <InputAdornment position="start"></InputAdornment>,
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton onClick={receiverStore.generateAlias} disabled={receiverStore.disabledMaster}>
@@ -223,6 +217,14 @@ function Receivers() {
               title: "Receiver Real",
               field: "receiver",
             },
+            // {
+            //   title: "",
+            //   field: 'toggle'
+            // }, 
+            // {
+            //   title: "",
+            //   field: 'delete'
+            // }
           ]}
           data={receiverStore.rows}
         />
@@ -231,7 +233,9 @@ function Receivers() {
           onClose={closeModalOnClose}
           className={classes.modal}
         >
-          <ReceiverForm handleCreateAliasModalClose={closeModalOnClose} />
+          <ReceiverForm
+            handleCreateAliasModalClose={closeModalOnClose}
+          />
         </Modal>
       </Grid>
     </Grid>
