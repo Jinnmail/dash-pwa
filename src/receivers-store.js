@@ -10,7 +10,7 @@ import ConfirmAliasDeletion from './ConfirmAliasDeletion';
 
 export class ReceiversStore {
   @observable realEmailAddresses = ['john@doe.com', 'jane@doe.com'];
-  @observable masterAlias;
+  @observable masterAlias = observable.object({});
   @observable proxymails = [];
   @observable disabledMaster;
   @observable rows = observable.array([]);
@@ -18,6 +18,11 @@ export class ReceiversStore {
   @observable error;
 
   userId = '';
+
+  @action.bound
+  setMasterAlias(masterAlias) {
+    this.masterAlias = masterAlias;
+  }
 
   @action.bound
   setRows(rows) {
@@ -39,7 +44,7 @@ export class ReceiversStore {
       const json = await res.json();
       if (json.data) {
         runInAction(() => {
-          this.masterAlias = json.data;
+          this.setMasterAlias(json.data);
           this.disabledMaster = true;
         });
       } else {
@@ -108,7 +113,7 @@ export class ReceiversStore {
 
   generateAlias = () => {
     const randStr = randomString(6);
-    this.masterAlias = randStr;
+    this.setMasterAlias({alias: randStr});
     this.generalErrorText = '';
     this.masterAliasError = false;
     this.masterAliasErrorText = '';

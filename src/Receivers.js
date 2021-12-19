@@ -90,7 +90,7 @@ function Receivers() {
     setMasterAliasErrorText('');
     var email = `${textboxVal}${process.env.REACT_APP_EMAIL_DOMAIN}`;
     if (emailAddressAllowed(email) || textboxVal === '') {
-      receiverStore.masterAlias = textboxVal;
+      receiverStore.setMasterAlias({alias: textboxVal});
     }
     receiverStore.generalErrorText = '';
   }
@@ -141,7 +141,7 @@ function Receivers() {
 
   const submitForm = () => {
     if (receiverStore.masterAlias) {
-      checkAlias(`${receiverStore.masterAlias}${process.env.REACT_APP_EMAIL_DOMAIN}`, receiverStore.masterAlias);
+      checkAlias(`${receiverStore.masterAlias.alias}${process.env.REACT_APP_EMAIL_DOMAIN}`, receiverStore.masterAlias.alias);
     } else {
       setMasterAliasError(true);
       setMasterAliasErrorText('Required');
@@ -171,7 +171,8 @@ function Receivers() {
           helperText={masterAliasErrorText}
           value={receiverStore?.masterAlias?.alias ? receiverStore?.masterAlias.alias : ''}
           inputProps={{ maxLength: 30 }}
-          InputProps={{            startAdornment: <InputAdornment position="start"></InputAdornment>,
+          InputProps={{
+            startAdornment: <InputAdornment position="start"></InputAdornment>,
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton onClick={receiverStore.generateAlias} disabled={receiverStore.disabledMaster}>
