@@ -9,6 +9,8 @@ import { randomString } from './functions';
 import ConfirmAliasDeletion from './ConfirmAliasDeletion';
 
 export class ReceiversStore {
+  static TOKEN = Symbol('RecieverStore');
+
   @observable realEmailAddresses = ['john@doe.com', 'jane@doe.com'];
   @observable masterAlias = observable.object({});
   @observable proxymails = [];
@@ -18,6 +20,10 @@ export class ReceiversStore {
   @observable error;
 
   userId = '';
+
+  constructor() {
+    
+  }
 
   @action.bound
   setMasterAlias(masterAlias) {

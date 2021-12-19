@@ -25,16 +25,17 @@ import {
   MailOutline as MailOutlineIcon,
   Refresh as RefreshIcon,
 } from '@material-ui/icons';
-import { observable, IObservableArray, action } from 'mobx';
 import { useObserver } from 'mobx-react';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
+import {container} from 'tsyringe';
 
 import NavBar from './NavBar';
 import { loggedIn } from './LoginUtil';
 import { ReceiversStore } from './receivers-store';
 import { emailAddressAllowed, randomString } from './functions';
 import ReceiverForm from './ReceiverForm';
+// import { useInjection } from './hooks/use-injection';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -65,9 +66,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Receivers() {
+  const receiverStore = container.resolve(ReceiversStore.TOKEN);
+  // const receiverStore = useInjection(ReceiversStore.TOKEN);
+
   const [masterAliasError, setMasterAliasError] = React.useState('');
   const [masterAliasErrorText, setMasterAliasErrorText] = React.useState('');
-  const [receiverStore] = useState(() => new ReceiversStore());
+  // const [receiverStore] = useState(() => new ReceiversStore());
   const [openModal, setOpenModal] = React.useState(false);
 
   const userId = JSON.parse(atob(localStorage.getItem("jinnmailToken").split('.')[1])).userId

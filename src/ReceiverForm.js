@@ -8,8 +8,10 @@ import {
   InputAdornment,
   TextField,
 } from '@material-ui/core';
+import {ReceiversStore} from './receivers-store';
 
 import { emailAddressAllowed } from './functions';
+import {useInjection} from './hooks/use-injection';
 
 const useStyles = makeStyles((theme) => ({
   dashboard: {
@@ -34,6 +36,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ReceiverForm(props) {
+  const receiverStore = useInjection(ReceiversStore.TOKEN);
+
   const [receiverAlias, setReceiverAlias] = React.useState('');
   const [receiverAliasError, setReceiverAliasError] = React.useState('');
   const [receiverAliasErrorText, setReceiverAliasErrorText] = React.useState('');
@@ -99,7 +103,7 @@ function ReceiverForm(props) {
       const res2json = await res2.json();
       if (!res2json.error) {
         // dispatch(aliasCreated(res2json.data.aliasId));
-;
+        await receiverStore.fetchData();
         props.handleCreateAliasModalClose();
       } else {
         setGeneralErrorText(res2json.error.message)

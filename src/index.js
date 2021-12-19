@@ -1,15 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { ThemeProvider } from '@material-ui/core/styles';
+import 'reflect-metadata';
+import { Provider } from 'react-redux';
+import { container } from 'tsyringe';
+
 import './index.css';
 import App from './App';
 import store from './app/store';
-import { Provider } from 'react-redux';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import ErrorBoundary from './ErrorBoundary';
-import {ThemeProvider} from '@material-ui/core/styles';
 import theme from './theme';
+import {ReceiversStore} from './receivers-store';
 // import swDev from './swDev';
+
+container.register(ReceiversStore.TOKEN, {useValue: new ReceiversStore()});
 
 ReactDOM.render(
   <React.StrictMode>
