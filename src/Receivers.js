@@ -1,6 +1,6 @@
 import React, { forwardRef, useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Button, Grid, Hidden, IconButton, InputAdornment, Modal, TextField } from '@material-ui/core';
+import { Button, Grid, IconButton, InputAdornment, Modal, Switch, TextField, Tooltip } from '@material-ui/core';
 import MaterialTable from "material-table";
 import {
   AddBox,
@@ -66,12 +66,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Receivers() {
+  let data = [];
   const receiverStore = container.resolve(ReceiversStore.TOKEN);
-  // const receiverStore = useInjection(ReceiversStore.TOKEN);
-
   const [masterAliasError, setMasterAliasError] = React.useState('');
   const [masterAliasErrorText, setMasterAliasErrorText] = React.useState('');
-  // const [receiverStore] = useState(() => new ReceiversStore());
   const [openModal, setOpenModal] = React.useState(false);
 
   const userId = JSON.parse(atob(localStorage.getItem("jinnmailToken").split('.')[1])).userId
@@ -79,7 +77,10 @@ function Receivers() {
   const classes = useStyles();
 
   useEffect(() => {
-    receiverStore.fetchData();
+    async function fetchData() {
+      await receiverStore.fetchData();
+    };
+    fetchData();
   }, [])
 
   const openModalOnClick = () => {
@@ -152,99 +153,116 @@ function Receivers() {
     }
   }
 
-  return useObserver(() => (
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        {loggedIn() && <NavBar />}
-      </Grid>
-      <Grid item xs={12}>
-        <h3 style={{ color: 'gray' }}>Receiver aliases is a new feature slowly being rolled out.</h3>
-        <h3 style={{ color: 'gray' }}>Jinnmail users will be able to email someone with their master alias directly.</h3>
-      </Grid>
-      <Grid item xs={12}>
-        <b style={{ color: 'gray' }}>All messages will appear to be from your master alias.</b>
-      </Grid>
-      <Grid item xs={8} md={4}>
-        <TextField
-          label="Hit ⟳ to generate"
-          variant="outlined"
-          fullWidth
-          disabled={receiverStore.disabledMaster}
-          onChange={e => onMasterAliasChanged(e.target.value)}
-          error={masterAliasError}
-          helperText={masterAliasErrorText}
-          value={receiverStore?.masterAlias?.alias ? receiverStore?.masterAlias.alias : ''}
-          inputProps={{ maxLength: 30 }}
-          InputProps={{
-            startAdornment: <InputAdornment position="start"></InputAdornment>,
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={receiverStore.generateAlias} disabled={receiverStore.disabledMaster}>
-                  <RefreshIcon />
-                </IconButton>
-              </InputAdornment>
-            )
-          }}
-        />
-      </Grid>
-      <Grid item xs={4} md={8}>&nbsp;</Grid>
-      <Grid item xs={12}>
-        <div style={{ color: 'red', textAlign: "left" }}>
-          {receiverStore.generalErrorText}
-        </div>
-      </Grid>
-      <Grid item xs={8} md={4}>
-        <Button 
-          variant="contained" 
-          color="primary"
-          fullWidth
-          onClick={submitForm}
-          disabled={receiverStore.disabledMaster}
-        >
-          Create
-        </Button>
-      </Grid>
-      <Grid item xs={12}>
-        <IconButton>
-          <AddIcon onClick={openModalOnClick} />
-        </IconButton>
-      </Grid>
-      <Grid item xs={12}>
-        <MaterialTable
-          title=""
-          icons={tableIcons}
-          columns={[
-            {
-              title: "Receiver Alias (Send  here)",
-              field: 'alias',
-            },
-            {
-              title: "Receiver Real",
-              field: "receiver",
-            },
-            // {
-            //   title: "",
-            //   field: 'toggle'
-            // }, 
-            // {
-            //   title: "",
-            //   field: 'delete'
-            // }
-          ]}
-          data={receiverStore.rows}
-        />
-        <Modal
-          open={openModal}
-          onClose={closeModalOnClose}
-          className={classes.modal}
-        >
-          <ReceiverForm
-            handleCreateAliasModalClose={closeModalOnClose}
+  return useObserver(() => {
+    receiverStore.rows.map((row) => (
+      data.push({
+        alias: row.alias,
+        receiver: row.receiver,
+        toggle:
+          <Switch
+            checked={row.status}
+            onChange={() => receiverStore.onToggleChange(row.aliasId, !row.status)}
+            color="secondary"
+            inputProps={{ 'aria-label': 'primary checkbox' }}
+          />,
+        delete: ''
+      })
+    ));
+
+    return (
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          {loggedIn() && <NavBar />}
+        </Grid>
+        <Grid item xs={12}>
+          <h3 style={{ color: 'gray' }}>Receiver aliases is a new feature slowly being rolled out.</h3>
+          <h3 style={{ color: 'gray' }}>Jinnmail users will be able to email someone with their master alias directly.</h3>
+        </Grid>
+        <Grid item xs={12}>
+          <b style={{ color: 'gray' }}>All messages will appear to be from your master alias.</b>
+        </Grid>
+        <Grid item xs={8} md={4}>
+          <TextField
+            label="Hit ⟳ to generate"
+            variant="outlined"
+            fullWidth
+            disabled={receiverStore.disabledMaster}
+            onChange={e => onMasterAliasChanged(e.target.value)}
+            error={masterAliasError}
+            helperText={masterAliasErrorText}
+            value={receiverStore?.masterAlias?.alias ? receiverStore?.masterAlias.alias : ''}
+            inputProps={{ maxLength: 30 }}
+            InputProps={{
+              startAdornment: <InputAdornment position="start"></InputAdornment>,
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={receiverStore.generateAlias} disabled={receiverStore.disabledMaster}>
+                    <RefreshIcon />
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
           />
-        </Modal>
+        </Grid>
+        <Grid item xs={4} md={8}>&nbsp;</Grid>
+        <Grid item xs={12}>
+          <div style={{ color: 'red', textAlign: "left" }}>
+            {receiverStore.generalErrorText}
+          </div>
+        </Grid>
+        <Grid item xs={8} md={4}>
+          <Button 
+            variant="contained" 
+            color="primary"
+            fullWidth
+            onClick={submitForm}
+            disabled={receiverStore.disabledMaster}
+          >
+            Create
+          </Button>
+        </Grid>
+        <Grid item xs={12}>
+          <IconButton>
+            <AddIcon onClick={openModalOnClick} />
+          </IconButton>
+        </Grid>
+        <Grid item xs={12}>
+          <MaterialTable
+            title=""
+            icons={tableIcons}
+            columns={[
+              {
+                title: "Receiver Alias (Send  here)",
+                field: 'alias',
+              },
+              {
+                title: "Receiver Real",
+                field: "receiver",
+              },
+              {
+                title: "",
+                field: 'toggle'
+              }, 
+              // {
+              //   title: "",
+              //   field: 'delete'
+              // }
+            ]}
+            data={data}
+            // data={receiverStore.rows}
+          />
+          <Modal
+            open={openModal}
+            onClose={closeModalOnClose}
+            className={classes.modal}
+          >
+            <ReceiverForm
+              handleCreateAliasModalClose={closeModalOnClose}
+            />
+          </Modal>
+        </Grid>
       </Grid>
-    </Grid>
-  ));
+  )});
 }
 
 export default withRouter(Receivers);

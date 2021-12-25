@@ -1,9 +1,4 @@
 import { observable, action, runInAction } from 'mobx';
-import {
-  IconButton,
-  Switch,
-  Tooltip
-} from '@material-ui/core';
 
 import { randomString } from './functions';
 import ConfirmAliasDeletion from './ConfirmAliasDeletion';
@@ -20,10 +15,6 @@ export class ReceiversStore {
   @observable error;
 
   userId = '';
-
-  constructor() {
-    
-  }
 
   @action.bound
   setMasterAlias(masterAlias) {
@@ -82,6 +73,39 @@ export class ReceiversStore {
     }
   }
 
+  async onToggleChange(aliasId, newStatus) {
+    const res = await fetch(`${process.env.REACT_APP_API}/alias/status`, {
+      method: 'PUT',
+      headers: {
+        'Content-type': 'application/json',
+        'Authorization': localStorage.getItem('jinnmailToken')
+      },
+      body: JSON.stringify({ aliasId: aliasId, status: newStatus }),
+    });
+    const json = await res.json();
+
+    const res2 = await fetch(`${process.env.REACT_APP_API}/alias/alias/${aliasId}`, {
+      method: 'GET',
+      headers: { 'Authorization': localStorage.getItem('jinnmailToken') }
+    });
+    const json2 = await res2.json();
+    const userAlias2 = json2.data;
+
+    const rows = this.rows.map(row => {
+      if (row.aliasId === aliasId) {
+        return {
+          ...row,
+          status: userAlias2.status
+        }
+      } 
+      return row;
+    });
+
+    runInAction(() => {
+      this.setRows(rows);
+    });
+  }
+
   async fetchReceiverAliases() {
     this.realEmailAddresses = [];
     const rawRows = await Promise.all(
@@ -101,20 +125,16 @@ export class ReceiversStore {
     const rows = []
     rawRows.forEach(row => {
       rows.push({
-        alias: row.receiver.alias, 
-        receiver: row.proxymail.proxyMail,
-        // toggle:           
-        //   <Switch
-        //     // checked={userAlias.status}
-        //     // onChange={() => onToggleChange(userAlias.aliasId, userAlias.status)}
-        //     // color="secondary"
-        //     // inputProps={{'aria-label': 'primary checkbox'}}
-        //   />,
-        // delete: 
-        //   <ConfirmAliasDeletion aliasId={"1"} alias={"2"} />
+        aliasId: row.receiver.aliasId,
+        alias: row.receiver.alias,
+        status: row.receiver.status,
+        receiver: row.proxymail.proxyMail
       });
     });
-    this.setRows(rows);
+
+    runInAction(() => {
+      this.setRows(rows);
+    });
   }
 
   generateAlias = () => {
