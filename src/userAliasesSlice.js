@@ -1,5 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
 import { getUser } from './app-helper';
+import { useInjection } from './hooks/use-injection';
+import { ReceiversStore } from './receivers-store';
 
 export const fetchUserAliases = createAsyncThunk('userAliases/fetchUserAliases', async () => {
   let userAliases;
@@ -67,6 +70,19 @@ export const deleteAlias = createAsyncThunk('userAliases/deleteAlias', async ali
         'Content-type': 'application/json', 
         'Authorization': localStorage.getItem('jinnmailToken')},
     })
+  const json = await res.json();
+
+  return aliasId;
+})
+
+export const deleteProxymail = createAsyncThunk('userAliases/deleteProxymail', async aliasId => {
+  const res = await fetch(`${process.env.REACT_APP_API}/proxymail/${aliasId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-type': 'application/json',
+      'Authorization': localStorage.getItem('jinnmailToken')
+    },
+  })
   const json = await res.json();
 
   return aliasId;
@@ -170,6 +186,10 @@ const userAliasesSlice = createSlice({
     [deleteAlias.fulfilled]: (state, action) => {
        state.userAliases = state.userAliases.filter(userAlias => userAlias.aliasId !== action.payload);
     }, 
+    [deleteProxymail.fulfilled]: (state, action) => {
+      const receiverStore = useInjection(ReceiversStore.TOKEN);
+      receiverStore.fetchData();
+    },
     [setToggle.fulfilled]: (state, action) => {
       let existingUserAlias = state.userAliases.find(userAlias => userAlias.aliasId === action.payload.aliasId)
       if (existingUserAlias) {

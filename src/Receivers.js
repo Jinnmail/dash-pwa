@@ -35,7 +35,7 @@ import { loggedIn } from './LoginUtil';
 import { ReceiversStore } from './receivers-store';
 import { emailAddressAllowed, randomString } from './functions';
 import ReceiverForm from './ReceiverForm';
-// import { useInjection } from './hooks/use-injection';
+import ConfirmAliasDeletion from './ConfirmAliasDeletion';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -165,7 +165,7 @@ function Receivers() {
             color="secondary"
             inputProps={{ 'aria-label': 'primary checkbox' }}
           />,
-        delete: ''
+        delete: <ConfirmAliasDeletion aliasId={row.aliasId} alias={row.alias} />
       })
     ));
 
@@ -243,13 +243,12 @@ function Receivers() {
                 title: "",
                 field: 'toggle'
               }, 
-              // {
-              //   title: "",
-              //   field: 'delete'
-              // }
+              {
+                title: "",
+                field: 'delete'
+              }
             ]}
             data={data}
-            // data={receiverStore.rows}
           />
           <Modal
             open={openModal}

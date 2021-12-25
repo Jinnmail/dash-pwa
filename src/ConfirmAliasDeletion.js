@@ -5,7 +5,8 @@ import {makeStyles, useTheme} from '@material-ui/core/styles';
 import {
   fetchUserAliases, 
   updateName, 
-  deleteAlias,  
+  deleteAlias, 
+  deleteProxymail, 
   setToggle, 
   selectUserAliases, 
   setNameTextReadOnly, 
@@ -92,6 +93,7 @@ function ConfirmAliasDeletion(props) {
   const handleModalClose = (agree) => {
     if (agree === true) { // explicity test for true hitting backdrop passes an object
       dispatch(deleteAlias(aliasId));
+      dispatch(deleteProxymail(aliasId));
     }
     setModalOpen(false);
   }

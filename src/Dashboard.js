@@ -243,19 +243,18 @@ function Dashboard() {
           icons={tableIcons}
           columns={[
             {
-              title: "Name", 
-              field: "name", 
+              title: "Name",
+              field: "name",
             }, 
             {
-              title: "Alias", 
-              field: 'alias', 
+              title: "Alias",
+              field: 'alias',
             }, 
-            {title: "", field: "copyAlias"}, 
-            {title: "", field: "openAndFill"}, 
-            {title: "Created", field: 'date'}, 
+            {title: "", field: "copyAlias"},
+            {title: "", field: "openAndFill"},
+            {title: "Created", field: 'date'},
             {title: "", field: "toggle"},
-            {title: "", field: "delete"}, 
-            // {title: 'Receivers', field: 'receivers'}
+            {title: "", field: "delete"}
           ]}
           data={data}
         />
