@@ -117,6 +117,9 @@ const NavBar = (props) => {
         </Toolbar>
       </AppBar>
       <br />
+      <div>
+        <a href="" onClick={onLogOutClick}><small>LOG OUT</small></a>
+      </div>
       <svg width="287" height="84" viewBox="0 0 287 84" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="287" height="84" fill="white"/>
         <mask id="path-1-inside-1_34:3046" fill="white">
