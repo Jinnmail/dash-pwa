@@ -136,8 +136,7 @@ function Receivers() {
       const res2json = await res2.json();
       if (!res2json.error) {
         receiverStore.disabledMaster = true;
-        // dispatch(aliasCreated(res2json.data.aliasId));
-        // props.handleCreateAliasModalClose();
+        receiverStore.fetchMasterAlias();
       } else {
         receiverStore.generalErrorText = 'alias was blacklisted, try another';
       }
