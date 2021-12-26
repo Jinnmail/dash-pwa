@@ -71,6 +71,7 @@ function Receivers() {
   const [masterAliasError, setMasterAliasError] = React.useState('');
   const [masterAliasErrorText, setMasterAliasErrorText] = React.useState('');
   const [openModal, setOpenModal] = React.useState(false);
+  const [openCopyAliasTooltip, setOpenCopyAliasTooltip] = useState('Copy alias');
 
   const userId = JSON.parse(atob(localStorage.getItem("jinnmailToken").split('.')[1])).userId
 
@@ -143,6 +144,20 @@ function Receivers() {
     }
   }
 
+  const copyAliasClicked = (alias) => {
+    var aux = document.createElement("input");
+    aux.setAttribute("value", alias);
+    document.body.appendChild(aux);
+    aux.select();
+    document.execCommand("copy");
+    document.body.removeChild(aux);
+    setOpenCopyAliasTooltip('Copied!');
+  };
+
+  const closeAliasTooltip = () => {
+    setOpenCopyAliasTooltip('Copy alias');
+  };
+
   const submitForm = () => {
     if (receiverStore.masterAlias) {
       checkAlias(`${receiverStore.masterAlias.alias}${process.env.REACT_APP_EMAIL_DOMAIN}`, receiverStore.masterAlias.alias);
@@ -156,6 +171,10 @@ function Receivers() {
     receiverStore.rows.map((row) => (
       data.push({
         alias: row.alias,
+        copyAlias:
+          <Tooltip title={openCopyAliasTooltip} onClose={closeAliasTooltip} enterDelay={100} leaveDelay={1000}>
+            <IconButton onClick={() => copyAliasClicked(row.alias)}><FileCopyIcon style={{color: "#d2576b"}} /></IconButton>
+          </Tooltip>,
         receiver: row.receiver,
         toggle:
           <Switch
@@ -234,6 +253,7 @@ function Receivers() {
                 title: "Receiver Alias (Send  here)",
                 field: 'alias',
               },
+              { title: "", field: "copyAlias" },
               {
                 title: "Receiver Real",
                 field: "receiver",

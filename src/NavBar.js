@@ -100,7 +100,7 @@ const NavBar = (props) => {
                     >
                       <MenuItem style={{ color: currPage('/dashboard') ? '#d2576b' : 'black'}} isCurrentPage={true} onClick={() => {props.history.push('/dashboard')}}>Dashboard</MenuItem>
                       <MenuItem style={{ color: currPage('/receivers') ? '#d2576b' : 'black' }} onClick={() => {props.history.push('/receivers')}}>Receivers</MenuItem>
-                    <MenuItem style={{ color: currPage('/account') ? '#d2576b' : 'black' }} onClick={() => { props.history.push('/account') }}>My account</MenuItem>
+                      <MenuItem style={{ color: currPage('/account') ? '#d2576b' : 'black' }} onClick={() => { props.history.push('/account') }}>My account</MenuItem>
                       <MenuItem onClick={onLogOutClick}>Log Out</MenuItem>
                     </Menu>
                   </Fragment>
