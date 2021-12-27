@@ -2,13 +2,8 @@ import React, { useEffect, useState } from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {Link} from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
-import AliasForm from './AliasForm';
-import ConfirmAliasDeletion from './ConfirmAliasDeletion';
-import {detectURL} from './functions';
 import MaterialTable from "material-table";
 import { forwardRef } from 'react';
-import { loggedIn } from './LoginUtil';
-import NavBar from './NavBar';
 import {
   fetchUserAliases,
   fetchUser, 
@@ -22,8 +17,7 @@ import {
 import {
   Button, 
   Chip,  
-  Grid, 
-  IconButton,   
+  Grid,    
   Modal, 
   Switch, 
   TextField, 
@@ -45,15 +39,18 @@ import {
   SaveAlt, 
   Search, 
   ViewColumn, 
-  DeleteForever as DeleteForeverIcon, 
-  ExitToApp as ExitToAppIcon,
-  FileCopy as FileCopyIcon,  
   Favorite as FavoriteIcon,
-  MailOutline as MailOutlineIcon,  
-  Refresh as RefreshIcon, 
+  MailOutline as MailOutlineIcon,   
 } from '@material-ui/icons';
 import Alert from '@material-ui/lab/Alert';
+
+import AliasForm from './AliasForm';
+import ConfirmAliasDeletion from './ConfirmAliasDeletion';
+import { detectURL } from './functions';
+import { loggedIn } from './LoginUtil';
+import NavBar from './NavBar';
 import { getUserId } from './app-helper';
+import CopiedTooltip from './copied-tooltip';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -102,7 +99,6 @@ function Dashboard() {
   const userAliasesStatus = useSelector((state) => state.userAliases.status);
   const user = useSelector((state) => state.userAliases.user);
   const error = useSelector((state) => state.userAliases.error);
-  const [openCopyAliasTooltip, setOpenCopyAliasTooltip] = useState('Copy alias');
   const [openCreateAliasModal, setCreateAliasModalOpen] = useState(false);
   const [mode, setMode] = useState('online');
 
@@ -155,20 +151,6 @@ function Dashboard() {
     // window.location = refferedUrl;
   }
 
-  const copyAliasClicked = (alias) => {
-    var aux = document.createElement("input");
-    aux.setAttribute("value", alias);
-    document.body.appendChild(aux);
-    aux.select();
-    document.execCommand("copy");
-    document.body.removeChild(aux);
-    setOpenCopyAliasTooltip('Copied!');
-  };
-
-  const closeAliasTooltip = () => {
-    setOpenCopyAliasTooltip('Copy alias');
-  };
-
   const onToggleChange = (aliasId, newStatus) => {
     dispatch(setToggle({aliasId: aliasId, newStatus: !newStatus}));
   }
@@ -207,10 +189,7 @@ function Dashboard() {
         , 
         alias: userAlias.alias, 
         date: `${monthNames[new Date(userAlias.created).getMonth()]} ${new Date(userAlias.created).getDate()}, ${new Date(userAlias.created).getFullYear()}`,
-        copyAlias: 
-          <Tooltip title={openCopyAliasTooltip} onClose={closeAliasTooltip} enterDelay={100} leaveDelay={1000}>
-            <IconButton onClick={() => copyAliasClicked(userAlias.alias)}><FileCopyIcon color="primary" /></IconButton>
-          </Tooltip>,
+        copyAlias: <CopiedTooltip alias={userAlias.alias} />,
         openAndFill: 
             detectURL(userAlias.refferedUrl)
             ?
