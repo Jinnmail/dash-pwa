@@ -28,7 +28,6 @@ npm start
 ## Deploy
 ```
 git push origin main
-
 ```
 
 ## First Deployment
