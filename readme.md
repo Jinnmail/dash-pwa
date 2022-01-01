@@ -72,6 +72,8 @@ exit
 
 ## Subsequent Deployments
 ```
+increase version number in package.json
+git push origin main
 screen -x tab
 ctrl c
 git pull && npm run build && serve -s build
