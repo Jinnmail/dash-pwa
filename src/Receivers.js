@@ -172,10 +172,14 @@ function Receivers() {
           {loggedIn() && <NavBar />}
         </Grid>
         <Grid item xs={12}>
-          <h3 style={{ color: 'gray' }}>Jinnmail users can now email anyone directly while still remaining anonymous:</h3>
-          <h3 style={{ color: 'gray' }}>1. Generate a one-time master alias and click CREATE</h3>
-          <h3 style={{ color: 'gray' }}>2. Create a receiver alias by clicking + and filling out the form</h3>
-          <h3 style={{ color: 'gray' }}>3. Copy the receiver alias and send an email</h3>
+          <h3 style={{ color: 'gray' }}>
+            Jinnmail users can now email anyone directly while still remaining anonymous:
+            <ol>
+              <li>Generate a one-time master alias and click CREATE</li>
+              <li>Create a receiver alias by clicking + and filling out the form</li>
+              <li>Copy the receiver alias and send an email</li>
+            </ol>
+          </h3>
         </Grid>
         <Grid item xs={12}>
           <b style={{ color: 'gray' }}>All messages will appear to be from your master alias.</b>
