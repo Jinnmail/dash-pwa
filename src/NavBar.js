@@ -98,9 +98,9 @@ const NavBar = (props) => {
                       open={open}
                       onClose={handleClose}
                     >
-                      <MenuItem style={{ color: currPage('/dashboard') ? '#d2576b' : 'black'}} isCurrentPage={true} onClick={() => {props.history.push('/dashboard')}}>Dashboard</MenuItem>
-                      <MenuItem style={{ color: currPage('/receivers') ? '#d2576b' : 'black' }} onClick={() => {props.history.push('/receivers')}}>Receivers</MenuItem>
-                      <MenuItem style={{ color: currPage('/account') ? '#d2576b' : 'black' }} onClick={() => { props.history.push('/account') }}>My account</MenuItem>
+                      <MenuItem style={{ color: currPage('/dashboard') ? '#8F860E' : 'black'}} isCurrentPage={true} onClick={() => {props.history.push('/dashboard')}}>Dashboard</MenuItem>
+                      <MenuItem style={{ color: currPage('/receivers') ? '#8F860E' : 'black' }} onClick={() => {props.history.push('/receivers')}}>Receivers</MenuItem>
+                      <MenuItem style={{ color: currPage('/account') ? '#8F860E' : 'black' }} onClick={() => { props.history.push('/account') }}>My account</MenuItem>
                       <MenuItem onClick={onLogOutClick}>Log Out</MenuItem>
                     </Menu>
                   </Fragment>
