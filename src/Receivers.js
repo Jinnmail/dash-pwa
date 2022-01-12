@@ -173,7 +173,7 @@ function Receivers() {
         </Grid>
         <Grid item xs={12}>
           <h3 style={{ color: 'gray' }}>
-            Jinnmail users can now email anyone directly while still remaining anonymous:
+            Anonymously email anyone you want using receiver aliases:
             <ol>
               <li>Generate a one-time master alias and click CREATE</li>
               <li>Create a receiver alias by clicking + and filling out the form</li>

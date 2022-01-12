@@ -242,9 +242,6 @@ function Dashboard() {
           onClose={handleCreateAliasModalClose}
           className={classes.modal}
         >
-          {/* <FormControl className={classes.paper}>
-            <TextField>My name is</TextField>
-          </FormControl> */}
           <AliasForm handleCreateAliasModalClose={handleCreateAliasModalClose} />
         </Modal>
       </div>
