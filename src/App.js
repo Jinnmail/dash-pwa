@@ -16,7 +16,7 @@ import Canceled from './Canceled';
 import Success from './Success';
 import X from './X';
 import { getUserId, getUser } from './app-helper';
-import Receivers from './Receivers';
+import {Receivers} from './receivers';
 import CacheBuster from './cache-buster';
 
 function PrivateRoute({ children, ...rest }) {
