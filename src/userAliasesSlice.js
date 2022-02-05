@@ -75,19 +75,6 @@ export const deleteAlias = createAsyncThunk('userAliases/deleteAlias', async ali
   return aliasId;
 })
 
-export const deleteProxymail = createAsyncThunk('userAliases/deleteProxymail', async aliasId => {
-  const res = await fetch(`${process.env.REACT_APP_API}/proxymail/${aliasId}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-type': 'application/json',
-      'Authorization': localStorage.getItem('jinnmailToken')
-    },
-  })
-  const json = await res.json();
-
-  return aliasId;
-})
-
 export const setToggle = createAsyncThunk('userAliases/setToggle', async ({aliasId, newStatus}) => {
   const res = await fetch(`${process.env.REACT_APP_API}/alias/status`, {
       method: 'PUT',
@@ -130,7 +117,7 @@ export const fetchUserInvitesArr = createAsyncThunk('userAliases/fetchUserInvite
 })
 
 const userAliasesSlice = createSlice({
-  name: 'userAliases', 
+  name: 'userAliases',
   initialState: {
     status: 'idle', 
     error: null, 
@@ -186,10 +173,6 @@ const userAliasesSlice = createSlice({
     [deleteAlias.fulfilled]: (state, action) => {
        state.userAliases = state.userAliases.filter(userAlias => userAlias.aliasId !== action.payload);
     }, 
-    [deleteProxymail.fulfilled]: (state, action) => {
-      const receiverStore = useInjection(ReceiversStore.TOKEN);
-      receiverStore.fetchData();
-    },
     [setToggle.fulfilled]: (state, action) => {
       let existingUserAlias = state.userAliases.find(userAlias => userAlias.aliasId === action.payload.aliasId)
       if (existingUserAlias) {

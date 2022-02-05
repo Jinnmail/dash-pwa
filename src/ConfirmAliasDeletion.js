@@ -6,12 +6,13 @@ import {
   fetchUserAliases, 
   updateName, 
   deleteAlias, 
-  deleteProxymail, 
+  // deleteProxymail, 
   setToggle, 
   selectUserAliases, 
   setNameTextReadOnly, 
   setNameButtonText
 } from './userAliasesSlice';
+import {deleteProxymail} from './receivers-slice'
 import {
   AddBox, 
   ArrowDownward, 

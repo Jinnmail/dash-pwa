@@ -164,7 +164,7 @@ function ReceiverForm(props) {
             error={receiverRealError}
             helperText={receiverRealErrorText}
             onChange={receiverRealChanged}
-            inputProps={{ maxLength: 50 }}
+            inputProps={{ maxLength: 60 }}
           />
         </Grid>
         <Grid item xs={12} style={{ textAlign: 'center' }}>

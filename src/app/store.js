@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userAliasesReducer from '../userAliasesSlice';
-// import counterReducer from '../features/counter/counterSlice';
+import receiverReducer from '../receivers-slice'
 
 export default configureStore({
   reducer: {
-    userAliases: userAliasesReducer
-    // counter: counterReducer,
+    userAliases: userAliasesReducer, 
+    receiver: receiverReducer
   },
 });
